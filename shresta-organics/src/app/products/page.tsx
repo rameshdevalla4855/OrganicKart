@@ -10,7 +10,9 @@ import { useAuth } from '@/context/AuthContext';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useProductStore } from '@/store/productStore';
 
-export default function ProductsPage() {
+import { Suspense } from 'react';
+
+function ProductsContent() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -92,7 +94,7 @@ export default function ProductsPage() {
       ) : filteredProducts.length === 0 ? (
         <div className="text-center py-20 bg-gray-50 rounded-3xl border border-gray-100">
           <h3 className="text-2xl font-playfair text-gray-600 mb-2">No Products Found</h3>
-          <p className="text-gray-500">Products tracking {activeCategory} category will appear here once uploaded by Admin.</p>
+          <p className="text-gray-500">Products in the {activeCategory} category will appear here once uploaded by Admin.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
@@ -102,5 +104,17 @@ export default function ProductsPage() {
         </div>
       )}
     </div>
+  );
+}
+
+export default function ProductsPage() {
+  return (
+    <Suspense fallback={
+       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 min-h-screen">
+          <ProductGridSkeleton />
+       </div>
+    }>
+      <ProductsContent />
+    </Suspense>
   );
 }
