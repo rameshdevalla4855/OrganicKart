@@ -5,9 +5,17 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req: Request) {
   try {
+    const key_id = process.env.RAZORPAY_KEY_ID;
+    const key_secret = process.env.RAZORPAY_KEY_SECRET;
+
+    if (!key_id || !key_secret) {
+      console.error("RAZORPAY KEYS MISSING");
+      return NextResponse.json({ error: "Payment gateway not configured" }, { status: 500 });
+    }
+
     const razorpay = new Razorpay({
-      key_id: process.env.RAZORPAY_KEY_ID || '',
-      key_secret: process.env.RAZORPAY_KEY_SECRET || '',
+      key_id,
+      key_secret,
     });
 
     const { amount, currency = "INR" } = await req.json();
