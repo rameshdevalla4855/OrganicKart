@@ -43,9 +43,10 @@ export default function ContactPage() {
       setName('');
       setMobile('');
       setMessage('');
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error("Contact form error:", err);
-      setError("Failed to send the message. Please try again later.");
+      const errorMessage = err instanceof Error ? err.message : "Failed to send the message. Please try again later.";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

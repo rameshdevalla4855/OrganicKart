@@ -98,12 +98,13 @@ export default function AddProductPage() {
       
       // Reset form
       setName(''); setPrice(''); setDiscountPrice(''); setStockCount(''); setWeight(''); setDescription(''); setImageFile(null);
-    } catch (err: any) {
-      setError(err.message || 'Failed to add product');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to add product';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
-  };
+  }
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-12">

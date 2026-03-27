@@ -12,13 +12,27 @@ import { useProductStore } from '@/store/productStore';
 
 import { Suspense } from 'react';
 
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  discountPrice?: number;
+  image_url: string;
+  weight: string;
+}
+
 function ProductsContent() {
   const { user, loading: authLoading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
   
   // Use Global Product Store
-  const { products, loading: productsLoading, fetchProducts } = useProductStore() as any;
+  const { products, loading: productsLoading, fetchProducts } = useProductStore() as { 
+    products: Product[], 
+    loading: boolean, 
+    fetchProducts: () => void 
+  };
   
   // Initialize category from URL or default to 'All'
   const initialCategory = searchParams.get('category') || 'All';
@@ -54,7 +68,7 @@ function ProductsContent() {
     );
   }
 
-  const filteredProducts = products.filter((p: any) => {
+  const filteredProducts = products.filter((p: Product) => {
     const matchesCategory = activeCategory === 'All' || p.category === activeCategory;
     const matchesSearch = !searchQueryParam || 
       p.name.toLowerCase().includes(searchQueryParam.toLowerCase()) ||
@@ -98,7 +112,7 @@ function ProductsContent() {
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
-          {filteredProducts.map((product: any, index: number) => (
+          {filteredProducts.map((product: Product, index: number) => (
             <ProductCard key={product.id} product={product} priority={index < 4} />
           ))}
         </div>

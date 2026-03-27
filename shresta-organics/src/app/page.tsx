@@ -9,13 +9,23 @@ import { Loader2 } from 'lucide-react';
 import { FaArrowRight, FaShieldAlt, FaLeaf, FaMagic, FaTruck } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  discountPrice?: number;
+  image_url: string;
+  weight: string;
+}
+
 // Premium Home Page Components
 import Hero from "@/components/home/Hero";
 import CollectionSlider from "@/components/home/CollectionSlider";
 import FAQ from "@/components/home/FAQ";
 
 export default function Home() {
-  const [bestsellers, setBestsellers] = useState<any[]>([]);
+  const [bestsellers, setBestsellers] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -23,9 +33,9 @@ export default function Home() {
       try {
         const q = query(collection(db, 'products'), orderBy('createdAt', 'desc'), limit(4));
         const querySnapshot = await getDocs(q);
-        const fetched: any[] = [];
+        const fetched: Product[] = [];
         querySnapshot.forEach((doc) => {
-          fetched.push({ id: doc.id, ...doc.data() });
+          fetched.push({ id: doc.id, ...doc.data() } as Product);
         });
         setBestsellers(fetched);
       } catch (error) {

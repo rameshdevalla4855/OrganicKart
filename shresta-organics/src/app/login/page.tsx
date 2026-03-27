@@ -22,7 +22,7 @@ export default function LoginPage() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       router.push('/');
-    } catch (err: any) {
+    } catch (err: unknown) {
       setError('Invalid email or password');
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ export default function LoginPage() {
           </div>
           <div className="text-center">
             <Link href="/signup" className="font-medium text-accent hover:text-accent-hover text-sm">
-              Don't have an account? Sign up
+              Don&apos;t have an account? Sign up
             </Link>
           </div>
         </form>

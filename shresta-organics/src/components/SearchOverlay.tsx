@@ -14,11 +14,20 @@ interface SearchOverlayProps {
   onClose: () => void;
 }
 
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  image_url: string;
+}
+
 export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const [searchQuery, setSearchQuery] = useState('');
-  const [results, setResults] = useState<any[]>([]);
-  const { products, recommendations, fetchProducts } = useProductStore() as any;
-  const [loading, setLoading] = useState(false);
+  const { products, fetchProducts } = useProductStore() as { 
+    products: Product[], 
+    fetchProducts: () => void 
+  };
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Focus input and pre-fetch products when opened
@@ -27,28 +36,18 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       setTimeout(() => inputRef.current?.focus(), 100);
       fetchProducts(); // Ensure data is in cache
     } else {
-      setSearchQuery('');
-      setResults([]);
+      // Small delay prevents cascading render warnings in strict mode
+      setTimeout(() => setSearchQuery(''), 0);
     }
   }, [isOpen, fetchProducts]);
 
-  // Live Search from Cache
-  useEffect(() => {
-    if (searchQuery.trim().length < 2) {
-      setResults([]);
-      return;
-    }
-
-    setLoading(true);
-    // INSTANT filter from cached products (instead of slow DB round-trip)
-    const filtered = products.filter((p: any) => 
-      p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      p.category.toLowerCase().includes(searchQuery.toLowerCase())
-    ).slice(0, 5);
-    
-    setResults(filtered);
-    setLoading(false);
-  }, [searchQuery, products]);
+  // Live Search from Cache (Derived State)
+  const results = searchQuery.trim().length >= 2 
+    ? products.filter((p: Product) => 
+        p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        p.category.toLowerCase().includes(searchQuery.toLowerCase())
+      ).slice(0, 5)
+    : [];
 
   // Close on Escape
   useEffect(() => {
@@ -81,7 +80,6 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                 className="w-full bg-transparent border-none outline-none text-2xl font-light placeholder:text-gray-300 text-primary"
               />
             </div>
-            {loading && <Loader2 className="w-6 h-6 animate-spin text-accent mr-4" />}
             <button 
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-full transition-colors"
@@ -100,7 +98,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                    <h3 className="text-xs font-bold uppercase tracking-widest text-gray-400 mb-6">Search Results</h3>
                    {results.length > 0 ? (
                      <div className="space-y-4">
-                       {results.map((product: any) => (
+                       {results.map((product: Product) => (
                          <Link 
                             key={product.id} 
                             href={`/products?search=${product.name}`}
@@ -108,7 +106,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                             className="flex items-center p-4 rounded-2xl hover:bg-gray-50 group transition-colors border border-transparent hover:border-gray-100"
                          >
                            <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-gray-100 mr-4 border border-gray-100">
-                             <Image src={product.imageUrl || '/placeholder.svg'} alt={product.name} fill className="object-cover" />
+                             <Image src={product.image_url || '/placeholder.svg'} alt={product.name} fill className="object-cover" />
                            </div>
                            <div className="flex-1">
                              <h4 className="font-bold text-primary group-hover:text-accent transition-colors">{product.name}</h4>
@@ -119,9 +117,9 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                          </Link>
                        ))}
                      </div>
-                   ) : !loading && (
+                    ) : (
                      <div className="text-center py-12">
-                       <p className="text-gray-500">No products found for "<span className="font-bold">{searchQuery}</span>"</p>
+                       <p className="text-gray-500">No products found for &quot;<span className="font-bold">{searchQuery}</span>&quot;</p>
                      </div>
                    )}
                 </div>
@@ -134,7 +132,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                     {searchQuery.length < 2 ? "Recommended for You" : "Try these instead"}
                   </h3>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    {products.slice(0, 4).map((product: any) => (
+                    {products.slice(0, 4).map((product: Product) => (
                       <Link 
                         key={product.id} 
                         href={`/products?search=${product.name}`}
@@ -142,7 +140,7 @@ export default function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
                         className="flex items-center p-4 rounded-2xl hover:bg-gray-50 group transition-colors border border-gray-100"
                       >
                         <div className="relative w-20 h-20 rounded-xl overflow-hidden bg-gray-100 mr-4">
-                          <Image src={product.imageUrl || '/placeholder.svg'} alt={product.name} fill className="object-cover" />
+                          <Image src={product.image_url || '/placeholder.svg'} alt={product.name} fill className="object-cover" />
                         </div>
                         <div>
                           <h4 className="font-bold text-primary group-hover:text-accent transition-colors">{product.name}</h4>

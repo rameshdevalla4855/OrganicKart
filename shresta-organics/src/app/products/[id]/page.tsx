@@ -11,12 +11,25 @@ import ProductCard from '@/components/ProductCard';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  discountPrice?: number;
+  image_url: string;
+  weight: string;
+  description: string;
+  isWoodPressed: boolean;
+  stock_count: number;
+}
+
 export default function ProductDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const unwrappedParams = use(params);
   const id = unwrappedParams.id;
   
-  const [product, setProduct] = useState<any>(null);
-  const [relatedProducts, setRelatedProducts] = useState<any[]>([]);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const router = useRouter();
@@ -32,7 +45,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
         const docSnap = await getDoc(docRef);
         
         if (docSnap.exists()) {
-          const mainProduct = { id: docSnap.id, ...docSnap.data() } as any;
+          const mainProduct = { id: docSnap.id, ...docSnap.data() } as Product;
           setProduct(mainProduct);
 
           // 2. Fetch Related Products (Same category, distinct ID)
@@ -43,8 +56,8 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
           );
           const relatedSnap = await getDocs(q);
           const fetchedRelated = relatedSnap.docs
-            .map(d => ({ id: d.id, ...d.data() } as any))
-            .filter((p: any) => p.id !== id)
+            .map(d => ({ id: d.id, ...d.data() } as Product))
+            .filter((p: Product) => p.id !== id)
             .slice(0, 4);
           
           setRelatedProducts(fetchedRelated);

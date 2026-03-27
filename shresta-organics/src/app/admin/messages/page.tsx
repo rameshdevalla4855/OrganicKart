@@ -8,11 +8,20 @@ import { collection, getDocs, doc, query, orderBy, updateDoc, deleteDoc } from '
 import { Loader2, Mail, MessageSquare, Clock, CheckCircle2, Trash2, Search, User, Phone, ExternalLink } from 'lucide-react';
 import Link from 'next/link';
 
+interface ContactMessage {
+  id: string;
+  name: string;
+  mobile: string;
+  message: string;
+  status: 'read' | 'unread';
+  createdAt: Date;
+}
+
 export default function AdminMessagesPage() {
   const { user, userData, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  const [messages, setMessages] = useState<any[]>([]);
+  const [messages, setMessages] = useState<ContactMessage[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [updatingId, setUpdatingId] = useState<string | null>(null);
@@ -35,7 +44,7 @@ export default function AdminMessagesPage() {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate() || new Date()
-      }));
+      })) as ContactMessage[];
       setMessages(items);
     } catch (error) {
       console.error('Error fetching messages:', error);

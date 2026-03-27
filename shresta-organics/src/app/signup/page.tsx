@@ -39,8 +39,9 @@ export default function SignupPage() {
       });
 
       router.push('/');
-    } catch (err: any) {
-      setError(err.message || 'Failed to sign up');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Failed to sign up';
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }

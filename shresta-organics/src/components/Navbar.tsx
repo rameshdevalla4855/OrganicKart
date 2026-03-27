@@ -12,6 +12,11 @@ import SearchOverlay from './SearchOverlay';
 import Logo from './Logo';
 import { motion, AnimatePresence } from 'framer-motion';
 
+interface CartItem {
+  id: string;
+  qty: number;
+}
+
 export default function Navbar() {
   const { user, userData } = useAuth();
   const router = useRouter();
@@ -23,7 +28,7 @@ export default function Navbar() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   
-  const cartItemCount = cartItems.reduce((total: number, item: any) => total + item.qty, 0);
+  const cartItemCount = cartItems.reduce((total: number, item: CartItem) => total + item.qty, 0);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -137,7 +142,7 @@ export default function Navbar() {
                       className="flex items-center space-x-2 p-1 pl-1 pr-3 hover:bg-gray-50 rounded-full border border-transparent hover:border-gray-100 transition-all"
                     >
                       <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center text-xs font-black shadow-inner">
-                         {getInitials(userData?.fullName || userData?.name)}
+                         {getInitials(userData?.fullName || userData?.name || user?.email || 'User')}
                       </div>
                       <span className="hidden md:block text-xs font-bold text-gray-700 truncate max-w-[100px]">
                         {userData?.fullName?.split(' ')[0] || userData?.name || 'User'}

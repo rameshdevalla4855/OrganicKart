@@ -24,7 +24,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-6 text-center">The Journey Back to Nature</h2>
           
           <p className="mb-6 leading-relaxed">
-            In today's fast-paced world, convenience often takes precedence over quality. Processed foods, artificial preservatives, and synthetic farming methods have slowly replaced the wholesome, nutrient-dense foods our ancestors enjoyed. 
+            In today&apos;s fast-paced world, convenience often takes precedence over quality. Processed foods, artificial preservatives, and synthetic farming methods have slowly replaced the wholesome, nutrient-dense foods our ancestors enjoyed. 
           </p>
           
           <p className="mb-10 leading-relaxed">
@@ -44,7 +44,7 @@ export default function AboutPage() {
 
           <h2 className="text-3xl font-playfair font-bold text-gray-900 mb-6 text-center">Our Commitment to You</h2>
           <p className="mb-6 leading-relaxed text-center">
-            Purity isn't just a marketing term for us—it's our core operating principle. Every jar of honey, every drop of oil, and every grain of spice delivered to your doorstep carries our unwavering promise of authenticity.
+            Purity isn&apos;t just a marketing term for us—it&apos;s our core operating principle. Every jar of honey, every drop of oil, and every grain of spice delivered to your doorstep carries our unwavering promise of authenticity.
           </p>
 
           <div className="mt-16 text-center">

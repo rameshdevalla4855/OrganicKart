@@ -17,7 +17,7 @@ export default function Footer() {
         <div className="lg:col-span-2">
             <Logo variant="footer" className="mb-6" />
             <p className="text-white/70 mb-8 leading-relaxed max-w-sm">
-              Bringing you nature's finest, ethically sourced organic essentials directly from traditional Indian farms. Certified pure and chemical-free.
+              Bringing you nature&apos;s finest, ethically sourced organic essentials directly from traditional Indian farms. Certified pure and chemical-free.
             </p>
             <div className="flex space-x-4">
               <a 

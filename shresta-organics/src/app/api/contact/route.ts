@@ -48,13 +48,14 @@ export async function POST(req: Request) {
     // 3. Send the email with a sub-try/catch to avoid 500 errors
     try {
       await transporter.sendMail(mailOptions);
-    } catch (mailError: any) {
-      console.warn('Email notification skipped or failed:', mailError.message);
+    } catch (mailError: unknown) {
+      const mailErrorMessage = mailError instanceof Error ? mailError.message : 'Unknown mail error';
+      console.warn('Email notification skipped or failed:', mailErrorMessage);
       // We still proceed to return 200 because the message IS saved in Firestore (from the client)
     }
 
     return NextResponse.json({ message: 'Message recorded successfully' }, { status: 200 });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('API critical error:', error);
     return NextResponse.json({ error: 'Failed to process inquiry' }, { status: 500 });
   }

@@ -10,11 +10,23 @@ import { AdminTableSkeleton } from '@/components/Skeletons';
 import Image from 'next/image';
 import Link from 'next/link';
 
+interface AdminProduct {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  discountPrice?: number;
+  weight: string;
+  image_url: string;
+  stock_count: number;
+  createdAt?: { seconds: number; nanoseconds: number } | null | undefined;
+}
+
 export default function AdminProductsPage() {
   const { user, userData, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<AdminProduct[]>([]);
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState('');
@@ -36,7 +48,7 @@ export default function AdminProductsPage() {
       const items = querySnapshot.docs.map(doc => ({
         id: doc.id,
         ...doc.data()
-      }));
+      })) as AdminProduct[];
       setProducts(items);
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -150,7 +162,7 @@ export default function AdminProductsPage() {
                    </td>
                 </tr>
               ) : (
-                filteredProducts.map((p) => (
+                filteredProducts.map((p: AdminProduct) => (
                   <tr key={p.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4">
                       <div className="flex items-center">

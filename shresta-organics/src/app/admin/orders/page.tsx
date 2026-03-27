@@ -9,11 +9,30 @@ import { Loader2, Package, Search, ShoppingBag, Clock, CheckCircle2, Truck, Chev
 import { AdminTableSkeleton } from '@/components/Skeletons';
 import Link from 'next/link';
 
+interface OrderItem {
+  name: string;
+  qty: number;
+  price: number;
+}
+
+interface Order {
+  id: string;
+  orderId: string;
+  userId: string;
+  total: number;
+  orderStatus: string;
+  paymentMethod: string;
+  paymentStatus: string;
+  shippingAddress: string;
+  createdAt: Date;
+  items: OrderItem[];
+}
+
 export default function AdminOrdersPage() {
   const { user, userData, loading: authLoading } = useAuth();
   const router = useRouter();
 
-  const [orders, setOrders] = useState<any[]>([]);
+  const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [expandedOrderId, setExpandedOrderId] = useState<string | null>(null);
@@ -37,7 +56,7 @@ export default function AdminOrdersPage() {
         id: doc.id,
         ...doc.data(),
         createdAt: doc.data().createdAt?.toDate() || new Date()
-      }));
+      })) as Order[];
       setOrders(items);
     } catch (error) {
       console.error('Error fetching orders:', error);
@@ -217,7 +236,7 @@ export default function AdminOrdersPage() {
                               <Package className="w-3 h-3 mr-2" /> Order Items
                            </h4>
                            <div className="space-y-3">
-                              {order.items?.map((item: any, idx: number) => (
+                              {order.items?.map((item: OrderItem, idx: number) => (
                                  <div key={idx} className="flex justify-between items-center py-2 border-b border-gray-50 last:border-0">
                                     <div className="flex items-center">
                                        <span className="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-[10px] font-bold mr-3">{item.qty}x</span>

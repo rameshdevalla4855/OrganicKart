@@ -9,6 +9,22 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+interface CartItem {
+  id: string;
+  name: string;
+  price: number;
+  discountPrice?: number;
+  qty: number;
+  weight: string;
+  image_url: string;
+}
+
+interface RazorpayResponse {
+  razorpay_payment_id: string;
+  razorpay_order_id: string;
+  razorpay_signature: string;
+}
+
 export default function CartPage() {
   const { cartItems, removeFromCart, updateQuantity, getCartTotal, clearCart } = useCartStore();
   const { user, userData } = useAuth();
@@ -57,7 +73,7 @@ export default function CartPage() {
         name: "Shresta Organics",
         description: "Premium Organic Essentials",
         order_id: orderData.id,
-        handler: async function (response: any) {
+        handler: async function (response: RazorpayResponse) {
           // 3. On Success: Complete Firestore Order
           const shippingString = `${address.fullAddress}, ${address.locality}, ${address.city}, ${address.state} - ${address.pincode}. Phone: ${address.phone}`;
           const res = await handleCheckout(user!.uid, cartItems, shippingString, 'Razorpay');
@@ -79,8 +95,9 @@ export default function CartPage() {
 
       const rzp = new (window as any).Razorpay(options);
       rzp.open();
-    } catch (err: any) {
-      setError(err.message || 'Payment initiation failed');
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Payment initiation failed';
+      setError(errorMessage);
       setLoading(false);
     }
   };
@@ -114,7 +131,7 @@ export default function CartPage() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center p-4">
         <h2 className="text-3xl font-playfair font-bold text-gray-800 mb-4">Your Cart is Empty</h2>
-        <p className="text-gray-500 mb-8 max-w-md text-center">Looks like you haven't added any premium organic products yet.</p>
+        <p className="text-gray-500 mb-8 max-w-md text-center">Looks like you haven&apos;t added any premium organic products yet.</p>
         <Link href="/">
           <button className="bg-primary hover:bg-primary-hover text-white px-8 py-3 rounded-xl font-medium transition-transform hover:scale-105">
             Start Shopping
@@ -162,7 +179,7 @@ export default function CartPage() {
             
             {currentStep === 1 ? (
               <div className="p-4 space-y-4">
-                {cartItems.map((item: any) => (
+                {cartItems.map((item: CartItem) => (
                   <div key={item.id} className="flex items-start py-4 border-b border-gray-100 last:border-0">
                     <div className="w-20 h-24 relative rounded overflow-hidden flex-shrink-0 bg-gray-50">
                       <Image src={item.image_url || '/placeholder.svg'} alt={item.name} fill className="object-cover" unoptimized={!!item.image_url} />

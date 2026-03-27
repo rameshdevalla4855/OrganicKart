@@ -32,7 +32,7 @@ export default function FAQ() {
         <div className="text-center mb-16">
           <FaQuestionCircle className="w-12 h-12 text-accent mx-auto mb-4" />
           <h2 className="text-4xl md:text-5xl font-playfair font-bold text-primary mb-4">Frequently Asked Questions</h2>
-          <p className="text-gray-600">Got questions? We've got answers about our organic journey.</p>
+          <p className="text-gray-600">Got questions? We&apos;ve got answers about our organic journey.</p>
         </div>
 
         <div className="space-y-4">

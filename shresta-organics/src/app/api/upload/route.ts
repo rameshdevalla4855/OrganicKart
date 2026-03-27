@@ -33,8 +33,9 @@ export async function POST(request: Request) {
     const publicUrl = `/uploads/products/${filename}`;
 
     return NextResponse.json({ url: publicUrl });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('LOCAL UPLOAD FAILED:', error);
-    return NextResponse.json({ error: `Local Upload Failed: ${error.message}` }, { status: 500 });
+    const errorMessage = error instanceof Error ? error.message : 'Unknown upload error';
+    return NextResponse.json({ error: `Local Upload Failed: ${errorMessage}` }, { status: 500 });
   }
 }
