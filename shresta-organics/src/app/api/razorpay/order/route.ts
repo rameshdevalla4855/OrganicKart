@@ -1,5 +1,4 @@
 import { NextResponse } from 'next/server';
-import Razorpay from 'razorpay';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +12,8 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Payment gateway not configured" }, { status: 500 });
     }
 
+    // Lazy load Razorpay to prevent any build-time instantiation
+    const Razorpay = require('razorpay');
     const razorpay = new Razorpay({
       key_id,
       key_secret,
@@ -33,9 +34,8 @@ export async function POST(req: Request) {
       amount: order.amount,
       currency: order.currency,
     });
-  } catch (error: unknown) {
+  } catch (error: any) {
     console.error("Razorpay Order Error:", error);
-    const errorMessage = error instanceof Error ? error.message : 'Razorpay order creation failed';
-    return NextResponse.json({ error: errorMessage }, { status: 500 });
+    return NextResponse.json({ error: error.message || 'Razorpay order creation failed' }, { status: 500 });
   }
 }
