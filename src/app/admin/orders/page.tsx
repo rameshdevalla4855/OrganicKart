@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import { useOrderStore } from '@/store/orderStore';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -26,27 +28,27 @@ export default function AdminOrders() {
   const { orders, loading, subscribeToOrders, updateOrderStatus, cleanup } = useOrderStore();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState('All');
-  const [statusLoading, setStatusLoading] = useState(null);
+  const [statusLoading, setStatusLoading] = useState<string | null>(null);
 
   useEffect(() => {
     subscribeToOrders();
     return () => cleanup();
   }, [subscribeToOrders, cleanup]);
 
-  const handleUpdateStatus = async (orderId, newStatus) => {
+  const handleUpdateStatus = async (orderId: string, newStatus: string) => {
     setStatusLoading(orderId);
     await updateOrderStatus(orderId, newStatus);
     setStatusLoading(null);
   };
 
-  const filteredOrders = orders.filter(o => {
+  const filteredOrders = orders.filter((o: any) => {
     const searchLow = searchQuery.toLowerCase();
-    const matchesSearch = o.shippingAddress?.toLowerCase().includes(searchLow) || o.id?.toLowerCase().includes(searchLow) || o.orderId?.toLowerCase().includes(searchLow);
-    const matchesFilter = activeFilter === 'All' || o.orderStatus === activeFilter.toLowerCase();
+    const matchesSearch = (o as any).shippingAddress?.toLowerCase().includes(searchLow) || (o as any).id?.toLowerCase().includes(searchLow) || (o as any).orderId?.toLowerCase().includes(searchLow);
+    const matchesFilter = activeFilter === 'All' || (o as any).orderStatus === activeFilter.toLowerCase();
     return matchesSearch && matchesFilter;
   });
 
-  const getPriority = (status) => {
+  const getPriority = (status: string) => {
     if (status === 'placed') return { label: 'Urgent', color: 'text-red-500 bg-red-50' };
     if (status === 'processing') return { label: 'Priority', color: 'text-amber-500 bg-amber-50' };
     return { label: 'Standard', color: 'text-slate-400 bg-slate-50' };
@@ -67,9 +69,9 @@ export default function AdminOrders() {
          
          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 w-full lg:w-auto">
             {[
-               { label: 'Placed', count: orders.filter(o => o.orderStatus === 'placed').length, color: 'text-amber-500', bg: 'bg-amber-50' },
-               { label: 'In Transit', count: orders.filter(o => o.orderStatus === 'shipped').length, color: 'text-primary', bg: 'bg-primary/5' },
-               { label: 'Delivered', count: orders.filter(o => o.orderStatus === 'delivered').length, color: 'text-emerald-500', bg: 'bg-emerald-50' },
+               { label: 'Pending Harvests', count: orders.filter((o: any) => (o as any).orderStatus === 'placed').length, color: 'text-amber-500', bg: 'bg-amber-50' },
+               { label: 'In Transit', count: orders.filter((o: any) => (o as any).orderStatus === 'shipped').length, color: 'text-primary', bg: 'bg-primary/5' },
+               { label: 'Completed', count: orders.filter((o: any) => (o as any).orderStatus === 'delivered').length, color: 'text-emerald-500', bg: 'bg-emerald-50' },
                { label: 'Total Node', count: orders.length, color: 'text-slate-500', bg: 'bg-slate-50' },
             ].map(stat => (
                <div key={stat.label} className={`${stat.bg} ${stat.color} p-5 rounded-2xl flex flex-col min-w-[120px]`}>
@@ -122,7 +124,7 @@ export default function AdminOrders() {
                </thead>
                <tbody className="divide-y divide-slate-50">
                   <AnimatePresence mode="popLayout">
-                    {filteredOrders.map((order, i) => (
+                    {filteredOrders.map((order: any, i: number) => (
                        <motion.tr 
                          key={order.id}
                          layout

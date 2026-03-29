@@ -145,7 +145,7 @@ export default function Home() {
         ) : bestsellers.length === 0 ? (
           <div className="bg-stone-50 p-20 rounded-[3rem] border border-stone-100 text-center">
              <p className="text-primary/40 text-lg mb-6">No products found yet.</p>
-             <Link href="/admin/products/new" className="px-8 py-3 bg-primary text-white rounded-full font-bold">Add Your First Product →</Link>
+             <Link href="/admin/products" className="px-8 py-3 bg-primary text-white rounded-full font-bold">Add Your First Product →</Link>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">

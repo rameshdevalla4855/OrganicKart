@@ -1,5 +1,7 @@
 'use client';
 
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import { useProductStore } from '@/store/productStore';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -18,20 +20,33 @@ import {
   Image as ImageIcon
 } from 'lucide-react';
 import Image from 'next/image';
+import { NextConfig } from 'next';
+
+interface Product {
+  id: string;
+  name: string;
+  category: string;
+  price: number;
+  discountPrice?: number;
+  stock_count: number;
+  weight?: string;
+  image_url: string;
+  description?: string;
+}
 
 export default function AdminProducts() {
-  const { products, loading, fetchProducts, addProduct, updateProduct, deleteProduct } = useProductStore();
+  const { products, loading, fetchProducts, addProduct, updateProduct, deleteProduct } = useProductStore() as any;
   
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   
   // Modal State
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingProduct, setEditingProduct] = useState(null);
+  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
   const [actionLoading, setActionLoading] = useState(false);
 
   // Form State
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<Partial<Product>>({
     name: '',
     category: 'Grains',
     price: 0,
@@ -50,14 +65,14 @@ export default function AdminProducts() {
     if (product) {
       setEditingProduct(product);
       setFormData({
-        name: product.name || '',
-        category: product.category || 'Grains',
-        price: product.price || 0,
-        discountPrice: product.discountPrice || 0,
-        stock_count: product.stock_count || 0,
-        weight: product.weight || '1kg',
-        image_url: product.image_url || '',
-        description: product.description || ''
+        name: (product as any).name || '',
+        category: (product as any).category || 'Grains',
+        price: (product as any).price || 0,
+        discountPrice: (product as any).discountPrice || 0,
+        stock_count: (product as any).stock_count || 0,
+        weight: (product as any).weight || '1kg',
+        image_url: (product as any).image_url || '',
+        description: (product as any).description || ''
       });
     } else {
       setEditingProduct(null);
@@ -75,7 +90,7 @@ export default function AdminProducts() {
     setIsModalOpen(true);
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setActionLoading(true);
     
@@ -95,13 +110,19 @@ export default function AdminProducts() {
     setActionLoading(false);
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     if (confirm('Are you sure you want to delete this harvest from the catalogue?')) {
       await deleteProduct(id);
     }
   };
 
-  const filteredProducts = products.filter(p => {
+  const nextConfig: NextConfig = {
+    images: {
+      unoptimized: true
+    }
+  };
+
+  const filteredProducts = products.filter((p: any) => {
     const matchesSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || p.category === selectedCategory;
     return matchesSearch && matchesCategory;
@@ -132,7 +153,7 @@ export default function AdminProducts() {
                <div className="flex flex-col">
                   <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Low Stock</span>
                   <span className="text-lg font-black text-amber-500">
-                    {products.filter(p => (p.stock_count || 0) < 10).length} Items
+                    {products.filter((p: any) => (p.stock_count || 0) < 10).length} Items
                   </span>
                </div>
             </div>
@@ -189,7 +210,7 @@ export default function AdminProducts() {
                </thead>
                <tbody className="divide-y divide-slate-50">
                   <AnimatePresence mode="popLayout">
-                    {filteredProducts.map((p, i) => (
+                    {filteredProducts.map((p: any, i: number) => (
                        <motion.tr 
                          key={p.id}
                          layout
