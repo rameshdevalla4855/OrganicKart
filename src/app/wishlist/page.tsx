@@ -40,7 +40,7 @@ export default function WishlistPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
-            {wishlistItems.map((p, i) => (
+            {wishlistItems.map((p: any, i: number) => (
               <motion.div
                 key={p.id}
                 initial={{ opacity: 0, y: 20 }}

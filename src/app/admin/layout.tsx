@@ -3,6 +3,8 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { useRouter, usePathname } from 'next/navigation';
+import { signOut } from 'firebase/auth';
+import { auth } from '@/firebase/firebaseInit';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
