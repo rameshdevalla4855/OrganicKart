@@ -1,0 +1,7 @@
+<svg width="800" height="800" xmlns="http://www.w3.org/2000/svg">
+  <rect width="100%" height="100%" fill="#F9F5EF" />
+  <g text-anchor="middle" font-family="system-ui, -apple-system, sans-serif">
+    <text x="50%" y="45%" font-size="32" font-weight="bold" fill="#1B5E20">Shresta Organics</text>
+    <text x="50%" y="55%" font-size="20" fill="#666666">Product Image Unavailable</text>
+  </g>
+</svg>
