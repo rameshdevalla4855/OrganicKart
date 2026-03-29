@@ -4,6 +4,7 @@ import { AuthProvider } from "@/context/AuthContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import LayoutWrapper from "@/components/LayoutWrapper";
+import WhatsAppButton from "@/components/WhatsAppButton";
 import { Metadata } from "next";
 import Script from "next/script";
 
@@ -40,6 +41,7 @@ export default function RootLayout({
         <AuthProvider>
           <LayoutWrapper>
             {children}
+            <WhatsAppButton />
           </LayoutWrapper>
         </AuthProvider>
       </body>
