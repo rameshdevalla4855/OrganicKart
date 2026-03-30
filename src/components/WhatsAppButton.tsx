@@ -25,7 +25,7 @@ const WhatsAppButton = () => {
           initial={{ opacity: 0, scale: 0, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0, y: 20 }}
-          className="fixed bottom-8 right-8 z-[100] flex flex-col items-end"
+          className="fixed bottom-28 md:bottom-8 right-8 z-[100] flex flex-col items-end"
         >
           {/* Tooltip */}
           <AnimatePresence>
