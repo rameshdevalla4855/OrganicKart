@@ -37,6 +37,7 @@ export default function CartPage() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   
+  const [useSavedAddress, setUseSavedAddress] = useState(false);
   const [address, setAddress] = useState({
     name: userData?.fullName || '',
     phone: '',
@@ -46,6 +47,13 @@ export default function CartPage() {
     city: '',
     state: ''
   });
+
+  useEffect(() => {
+    if (userData?.lastAddressObj) {
+      setAddress(userData.lastAddressObj);
+      setUseSavedAddress(true);
+    }
+  }, [userData]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -73,7 +81,7 @@ export default function CartPage() {
         order_id: orderData.id,
         handler: async function (response: RazorpayResponse) {
           const shippingString = `${address.fullAddress}, ${address.locality}, ${address.city}, ${address.state} - ${address.pincode}. Phone: ${address.phone}`;
-          const res = await handleCheckout(user!.uid, cartItems, shippingString, 'Razorpay');
+          const res = await handleCheckout(user!.uid, cartItems, shippingString, 'Razorpay', address as any);
           if (res.success) {
             setSuccess(`Payment Successful! Order ID: ${res.orderId}`);
             clearCart();
@@ -98,7 +106,7 @@ export default function CartPage() {
     }
   };
 
-  const onFinalOrder = async () => {
+   const onFinalOrder = async () => {
     if (!user) {
       router.push('/login');
       return;
@@ -112,7 +120,7 @@ export default function CartPage() {
     setLoading(true);
     setError('');
     const shippingString = `${address.fullAddress}, ${address.locality}, ${address.city}, ${address.state} - ${address.pincode}. Phone: ${address.phone}`;
-    const res = await handleCheckout(user.uid, cartItems, shippingString, 'COD');
+    const res = await handleCheckout(user.uid, cartItems, shippingString, 'COD', address as any);
     if (res.success) {
       setSuccess(`Order successfully placed! Order ID: ${res.orderId}`);
       clearCart();
@@ -260,35 +268,69 @@ export default function CartPage() {
                         exit={{ height: 0, opacity: 0 }}
                         className="p-8 space-y-8 overflow-hidden"
                      >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                           {[
-                              { label: 'Recipient Name', name: 'name', type: 'text' },
-                              { label: 'Phone Number', name: 'phone', type: 'text' },
-                              { label: 'Pincode', name: 'pincode', type: 'text' },
-                              { label: 'Locality / Area', name: 'locality', type: 'text' },
-                              { label: 'City', name: 'city', type: 'text' },
-                              { label: 'State', name: 'state', type: 'text' }
-                           ].map((field) => (
-                              <div key={field.name} className="space-y-3">
-                                 <label className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">{field.label}</label>
-                                 <input 
-                                    name={field.name} 
-                                    value={(address as any)[field.name]} 
-                                    onChange={handleInputChange} 
-                                    className="w-full bg-stone-50 border border-black/5 rounded-2xl px-6 py-4 text-sm font-bold text-primary focus:bg-white focus:border-primary/20 outline-none transition-all" 
-                                 />
+                         {userData?.lastAddress && (
+                           <div className="mb-6 p-8 bg-stone-50 border border-primary/10 rounded-[2.5rem] relative overflow-hidden group">
+                              <div className="flex items-start gap-6">
+                                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mt-1 transition-all ${useSavedAddress ? 'border-primary bg-primary' : 'border-stone-200'}`}>
+                                    {useSavedAddress && <div className="w-2.5 h-2.5 rounded-full bg-white scale-up" />}
+                                 </div>
+                                 <div className="flex-1" onClick={() => setUseSavedAddress(true)}>
+                                    <div className="flex items-center justify-between mb-4">
+                                       <p className="text-[10px] font-black text-primary/40 uppercase tracking-[0.3em]">Selected Destination</p>
+                                       <button 
+                                         onClick={(e) => { e.stopPropagation(); setUseSavedAddress(false); }} 
+                                         className="text-[10px] font-black text-secondary hover:text-secondary/70 uppercase tracking-widest underline decoration-2 underline-offset-4"
+                                       >
+                                          Change Address
+                                       </button>
+                                    </div>
+                                    <p className="text-sm font-black text-primary leading-relaxed uppercase tracking-tight line-clamp-3">{userData.lastAddress}</p>
+                                 </div>
                               </div>
-                           ))}
-                           <div className="md:col-span-2 space-y-3">
-                              <label className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">Complete Shipping Address</label>
-                               <textarea 
-                                 name="fullAddress" 
-                                 value={address.fullAddress} 
-                                 onChange={handleInputChange} 
-                                 className="w-full bg-stone-50 border border-black/5 rounded-[2rem] px-6 py-5 text-sm font-bold text-primary focus:bg-white focus:border-primary/20 outline-none transition-all min-h-[120px]" 
-                               />
+                              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
+                                 <MapPin className="w-12 h-12 text-primary" />
+                              </div>
                            </div>
-                        </div>
+                         )}
+
+                         <AnimatePresence>
+                           {(!useSavedAddress || !userData?.lastAddress) && (
+                             <motion.div 
+                               initial={{ opacity: 0, height: 0 }}
+                               animate={{ opacity: 1, height: 'auto' }}
+                               exit={{ opacity: 0, height: 0 }}
+                               className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden"
+                             >
+                               {[
+                                  { label: 'Recipient Name', name: 'name', type: 'text' },
+                                  { label: 'Phone Number', name: 'phone', type: 'text' },
+                                  { label: 'Pincode', name: 'pincode', type: 'text' },
+                                  { label: 'Locality / Area', name: 'locality', type: 'text' },
+                                  { label: 'City', name: 'city', type: 'text' },
+                                  { label: 'State', name: 'state', type: 'text' }
+                               ].map((field) => (
+                                  <div key={field.name} className="space-y-3">
+                                     <label className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">{field.label}</label>
+                                     <input 
+                                        name={field.name} 
+                                        value={(address as any)[field.name]} 
+                                        onChange={handleInputChange} 
+                                        className="w-full bg-stone-50 border border-black/5 rounded-2xl px-6 py-4 text-sm font-bold text-primary focus:bg-white focus:border-primary/20 outline-none transition-all" 
+                                     />
+                                  </div>
+                               ))}
+                               <div className="md:col-span-2 space-y-3">
+                                  <label className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">Complete Shipping Address</label>
+                                   <textarea 
+                                     name="fullAddress" 
+                                     value={address.fullAddress} 
+                                     onChange={handleInputChange} 
+                                     className="w-full bg-stone-50 border border-black/5 rounded-[2rem] px-6 py-5 text-sm font-bold text-primary focus:bg-white focus:border-primary/20 outline-none transition-all min-h-[120px]" 
+                                   />
+                               </div>
+                             </motion.div>
+                           )}
+                         </AnimatePresence>
                         <div className="pt-8 flex justify-end">
                            <button 
                              disabled={!address.name || !address.phone || !address.pincode}

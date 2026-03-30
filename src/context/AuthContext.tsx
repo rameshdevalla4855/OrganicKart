@@ -10,6 +10,8 @@ interface UserData {
   email?: string;
   fullName?: string;
   name?: string;
+  lastAddress?: string;
+  lastAddressObj?: any;
   role: 'admin' | 'user';
 }
 

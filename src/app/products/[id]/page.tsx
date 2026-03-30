@@ -19,6 +19,7 @@ interface Product {
   price: number;
   discountPrice?: number;
   image_url: string;
+  images?: string[];
   weight: string;
   description: string;
   isWoodPressed: boolean;
@@ -41,6 +42,7 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
   const [loading, setLoading] = useState(true);
   const [qty, setQty] = useState(1);
   const [activeTab, setActiveTab] = useState<'details' | 'reviews' | 'qa'>('details');
+  const [activeImageIndex, setActiveImageIndex] = useState(0);
   const router = useRouter();
   
   const addToCart = useCartStore((state) => state.addToCart);
@@ -119,55 +121,82 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
       <div className="max-w-7xl mx-auto px-6 lg:px-12 py-8 pb-32">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
           
-          {/* Left Column: Image Center (Sticky) */}
+          {/* Left Column: Image Center (Sticky Carousel) */}
           <div className="lg:col-span-6 lg:sticky lg:top-32 h-fit">
-            <motion.div 
-               initial={{ opacity: 0, scale: 0.95 }}
-               animate={{ opacity: 1, scale: 1 }}
-               className="relative aspect-square w-full rounded-[3.5rem] overflow-hidden bg-stone-50 border border-black/5 shadow-premium"
-            >
-              <Image
-                src={product.image_url || '/placeholder.svg'}
-                alt={product.name}
-                fill
-                className="object-cover object-center transition-transform duration-1000 hover:scale-110"
-                unoptimized={!!product.image_url}
-              />
-              <div className="absolute top-8 left-8 flex flex-col gap-3">
+            <div className="relative aspect-square w-full rounded-[2rem] lg:rounded-[3.5rem] overflow-hidden bg-stone-50 border border-black/5 shadow-premium">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeImageIndex}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -20 }}
+                  transition={{ duration: 0.3 }}
+                  className="relative w-full h-full"
+                >
+                  <Image
+                    src={(product.images && product.images.length > 0 ? product.images[activeImageIndex] : product.image_url) || '/placeholder.svg'}
+                    alt={product.name}
+                    fill
+                    className="object-cover object-center"
+                    unoptimized={true}
+                  />
+                </motion.div>
+              </AnimatePresence>
+
+              {/* Badges */}
+              <div className="absolute top-6 left-6 flex flex-col gap-2">
                  {product.isWoodPressed && (
-                    <div className="bg-secondary text-white px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest shadow-premium">
+                    <div className="bg-secondary text-white px-4 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest shadow-premium">
                        Wood Pressed
                     </div>
                  )}
-                 <div className="bg-white text-primary px-6 py-2 rounded-full font-black text-[10px] uppercase tracking-widest shadow-premium border border-black/5">
+                 <div className="bg-white text-primary px-4 py-1.5 rounded-full font-black text-[9px] uppercase tracking-widest shadow-premium border border-black/5">
                     100% Organic
                  </div>
               </div>
 
               {/* Interaction Overlay */}
-              <div className="absolute top-8 right-8 flex flex-col gap-3">
-                 <button className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-red-500 hover:scale-110 transition-all shadow-premium">
-                    <Heart className="w-5 h-5" />
-                 </button>
-                 <button className="w-12 h-12 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-primary hover:scale-110 transition-all shadow-premium">
-                    <Share2 className="w-5 h-5" />
+              <div className="absolute top-6 right-6 flex flex-col gap-2">
+                 <button className="w-10 h-10 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-gray-400 hover:text-red-500 hover:scale-110 transition-all shadow-premium">
+                    <Heart className="w-4.5 h-4.5" />
                  </button>
               </div>
-            </motion.div>
 
-            {/* Micro Gallery (Future expansion) */}
-            <div className="grid grid-cols-4 gap-4 mt-8">
-               {[1,2,3,4].map((i) => (
-                  <div key={i} className={`aspect-square rounded-2xl border-2 transition-all cursor-pointer ${i === 1 ? 'border-primary bg-stone-100' : 'border-black/5 bg-stone-50 hover:bg-stone-100'}`} />
-               ))}
+              {/* Carousel Pagination Dots */}
+              {product.images && product.images.length > 1 && (
+                <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex space-x-2">
+                  {product.images.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`h-1.5 rounded-full transition-all ${activeImageIndex === idx ? 'w-6 bg-primary' : 'w-1.5 bg-primary/20'}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
+
+            {/* Thumbnail Selection */}
+            {product.images && product.images.length > 1 && (
+              <div className="flex gap-4 mt-6 overflow-x-auto no-scrollbar pb-2">
+                 {product.images.map((img, idx) => (
+                    <button 
+                      key={idx}
+                      onClick={() => setActiveImageIndex(idx)}
+                      className={`relative w-20 h-20 rounded-2xl overflow-hidden border-2 flex-shrink-0 transition-all ${activeImageIndex === idx ? 'border-primary' : 'border-black/5'}`}
+                    >
+                      <Image src={img} alt={`${product.name} ${idx + 1}`} fill className="object-cover" unoptimized />
+                    </button>
+                 ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Information Hub */}
           <div className="lg:col-span-6">
             <div className="mb-10">
               <span className="text-secondary font-black text-[11px] uppercase tracking-[0.3em] mb-4 block">Harvested with care</span>
-              <h1 className="text-5xl md:text-6xl font-playfair font-black text-primary mb-6 leading-[1.1]">{product.name}</h1>
+              <h1 className="text-4xl md:text-6xl font-playfair font-black text-primary mb-6 leading-[1.1]">{product.name}</h1>
               
               <div className="flex items-center space-x-6">
                 <div className="flex items-center bg-green-50 px-4 py-2 rounded-xl group cursor-pointer hover:bg-green-100 transition-colors">
@@ -229,8 +258,26 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
                     className="flex-grow w-full bg-primary hover:bg-primary-hover text-white py-6 px-10 rounded-[2rem] font-black text-xs uppercase tracking-[0.3em] flex justify-center items-center transition-all hover:scale-[1.02] shadow-premium hover:shadow-[#1B4332]/30 active:scale-95 disabled:opacity-50"
                   >
                     <ShoppingCart className="w-5 h-5 mr-4" />
-                    {product.stock_count <= 0 ? 'Out of Stock' : 'Secure Checkout'}
+                    {product.stock_count <= 0 ? 'Out of Stock' : 'Add to Basket'}
                   </button>
+               </div>
+
+               {/* Sticky Mobile Add to Cart (App-Style Flush Footer) */}
+               <div className="lg:hidden fixed bottom-16 left-0 right-0 z-50 px-6 py-5 bg-white border-t border-stone-100 shadow-[0_-10px_40px_rgba(0,0,0,0.1)]">
+                  <div className="flex items-center gap-6 max-w-md mx-auto">
+                     <div className="flex flex-col">
+                        <p className="text-[9px] font-black text-primary/40 uppercase tracking-widest leading-none mb-1">Total Valuation</p>
+                        <p className="text-xl font-black text-primary tracking-tighter leading-none">₹{(product.discountPrice || product.price) * qty}</p>
+                     </div>
+                     <button
+                        disabled={product.stock_count <= 0}
+                        onClick={() => addToCart(product, qty)}
+                        className="flex-grow bg-primary text-white py-5 rounded-2xl font-black text-[10px] uppercase tracking-[0.2em] shadow-premium active:scale-95 flex items-center justify-center gap-3"
+                     >
+                        <ShoppingCart className="w-4 h-4" />
+                        {product.stock_count <= 0 ? 'Stock Zero' : 'Secure Checkout'}
+                     </button>
+                  </div>
                </div>
 
                {/* Flipkart Style Tabs */}
@@ -337,11 +384,11 @@ export default function ProductDetailPage({ params }: { params: Promise<{ id: st
               </Link>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+            <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
               {relatedProducts.map((p, index) => (
                 <motion.div
                   key={p.id}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1, duration: 0.8 }}

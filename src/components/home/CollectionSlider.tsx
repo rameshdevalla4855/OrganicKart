@@ -68,7 +68,7 @@ export default function CollectionSlider() {
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ delay: i * 0.1, duration: 0.8 }}
-                className="flex-shrink-0 w-[22rem] md:w-[32rem] snap-start"
+                className="flex-shrink-0 w-[45vw] md:w-[32rem] snap-start"
               >
                 <button 
                   onClick={() => handleProductClick(`/products/${prod.id}`)}

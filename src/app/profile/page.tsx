@@ -70,7 +70,7 @@ function ProfileContent() {
   const { user, userData, loading } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'profile');
+  const [activeTab, setActiveTab] = useState(searchParams.get('tab') || 'menu');
   const [selectedOrderId, setSelectedOrderId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -116,8 +116,8 @@ function ProfileContent() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* Dashboard Sidebar */}
-          <aside className="lg:col-span-3 space-y-2">
+          {/* Dashboard Sidebar - Hidden on mobile if a tab is active (except the main profile menu if we consider it as such) */}
+          <aside className={`lg:col-span-3 space-y-2 ${activeTab !== 'menu' ? 'hidden lg:block' : 'block'}`}>
             {tabs.map((tab) => (
               <button
                 key={tab.id}
@@ -132,7 +132,7 @@ function ProfileContent() {
                    <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-primary/20 group-hover:text-primary'} transition-colors`} />
                    <span className="text-xs font-black uppercase tracking-widest">{tab.label}</span>
                 </div>
-                {activeTab === tab.id && <ChevronRight className="w-4 h-4" />}
+                <ChevronRight className={`w-4 h-4 transition-transform ${activeTab === tab.id ? 'rotate-90 lg:rotate-0' : ''}`} />
               </button>
             ))}
             
@@ -149,8 +149,20 @@ function ProfileContent() {
             </div>
           </aside>
 
-          {/* Main Dashboard Content */}
-          <main className="lg:col-span-9">
+          {/* Main Dashboard Content - Mobile Back Button added */}
+          <main className={`lg:col-span-9 ${activeTab === 'menu' ? 'hidden lg:block' : 'block'}`}>
+            {/* Mobile Back Button */}
+            <div className="lg:hidden mb-10">
+               <button 
+                 onClick={() => { setActiveTab('menu'); setSelectedOrderId(null); }}
+                 className="flex items-center space-x-4 text-[10px] font-black text-primary/40 uppercase tracking-[0.3em] group"
+               >
+                  <div className="w-12 h-12 rounded-full border border-stone-100 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
+                     <ChevronLeft className="w-5 h-5" />
+                  </div>
+                  <span>Return to Menu</span>
+               </button>
+            </div>
             <AnimatePresence mode="wait">
               {activeTab === 'profile' && (
                 <motion.div

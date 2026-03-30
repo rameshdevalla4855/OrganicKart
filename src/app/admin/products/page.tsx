@@ -31,6 +31,7 @@ interface Product {
   stock_count: number;
   weight?: string;
   image_url: string;
+  images?: string[];
   description?: string;
 }
 
@@ -418,18 +419,23 @@ export default function AdminProducts() {
                     </div>
 
                     <div className="col-span-2 space-y-2">
-                       <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Harvest Image URL</label>
+                       <label className="text-[9px] font-black uppercase tracking-widest text-slate-400 ml-2">Harvest Photos (Comma separated URLs)</label>
                        <div className="relative">
                           <ImageIcon className="absolute left-6 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
                           <input 
                             required
                             type="text" 
                             value={formData.image_url}
-                            onChange={(e) => setFormData({...formData, image_url: e.target.value})}
-                            placeholder="https://..."
+                            onChange={(e) => {
+                              const val = e.target.value;
+                              const imgs = val.split(',').map(s => s.trim()).filter(Boolean);
+                              setFormData({...formData, image_url: val, images: imgs} as any);
+                            }}
+                            placeholder="url1, url2, url3..."
                             className="w-full pl-14 pr-6 py-4 bg-slate-50 border border-transparent focus:bg-white focus:border-primary/20 rounded-2xl text-sm font-bold outline-none transition-all"
                           />
                        </div>
+                       <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest ml-2 italic">Tip: First image will be the primary thumbnail</p>
                     </div>
                   </div>
 

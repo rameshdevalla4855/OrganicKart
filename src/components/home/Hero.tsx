@@ -32,7 +32,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <section className="relative h-[80vh] min-h-[550px] flex items-center overflow-hidden bg-[#FDFCFB] mt-28 md:mt-40">
+    <section className="relative h-[35vh] md:h-[80vh] min-h-[300px] md:min-h-[550px] flex items-center overflow-hidden bg-[#FDFCFB] mt-20 md:mt-40">
       {/* Cinematic Background Slider */}
       <div className="absolute inset-0 z-0">
         <AnimatePresence mode="wait">

@@ -5,7 +5,7 @@ import { doc, collection, runTransaction, serverTimestamp } from 'firebase/fires
  * handleCheckout verifies stock and creates an order using a Firestore Transaction.
  * Ensure that `auth.currentUser` is defined before calling.
  */
-export const handleCheckout = async (userId, cartItems, shippingAddress, paymentMethod) => {
+export const handleCheckout = async (userId, cartItems, shippingAddress, paymentMethod, addressObj = null) => {
   if (!userId) throw new Error("User must be logged in to checkout.");
   if (!cartItems || cartItems.length === 0) throw new Error("Cart is empty.");
 
@@ -61,10 +61,19 @@ export const handleCheckout = async (userId, cartItems, shippingAddress, payment
         paymentStatus: paymentMethod === 'COD' ? 'pending' : 'paid',
         orderStatus: 'placed',
         shippingAddress,
+        shippingAddressObj: addressObj, // Enhanced persistence
         createdAt: serverTimestamp()
       };
       
       transaction.set(newOrderRef, orderData);
+
+      // Save Last Address to User Profile for Professional Persistence
+      const userRef = doc(db, 'users', userId);
+      transaction.update(userRef, { 
+        lastAddress: shippingAddress,
+        lastAddressObj: addressObj, // Save the actual object for pre-filling
+        updatedAt: serverTimestamp() 
+      });
     });
 
     console.log(`Order ${orderId} created successfully via transaction.`);

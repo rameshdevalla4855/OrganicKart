@@ -96,21 +96,21 @@ export default function Home() {
         style={{ scaleX }}
       />
 
+      {/* Professional Mobile Categories - Positioned Top for High Density */}
+      <CategoryMobile />
+
       {/* Hero Section */}
       <Hero />
-
-      {/* Professional Mobile Categories */}
-      <CategoryMobile />
 
       {/* Dynamic Collection Slider - Positioned under the banner */}
       <div className="bg-white">
         <CollectionSlider />
       </div>
 
-      {/* Trust Builders / USP - Botanical SaaS Section */}
-      <section className="py-24 relative overflow-hidden bg-white bg-grid">
+      {/* Trust Builders / USP - High-Density Ribbon */}
+      <section className="py-12 relative overflow-hidden bg-white">
         <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-12">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12">
             {[
               { icon: FaLeaf, title: "100% Organic", desc: "Pure Harvests", color: "text-primary" },
               { icon: FaShieldAlt, title: "Lab Tested", desc: "Certified Safety", color: "text-secondary" },
@@ -119,17 +119,17 @@ export default function Home() {
             ].map((usp, i) => (
               <motion.div 
                 key={usp.title}
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.1, duration: 0.8 }}
-                className="group flex flex-col items-center text-center p-12 rounded-[2rem] bg-stone-50 hover:bg-white transition-all duration-700 shadow-soft border border-stone-100"
+                className="group flex flex-col items-center text-center p-6 md:p-12 rounded-[2rem] bg-stone-50 hover:bg-white transition-all duration-700 shadow-soft border border-stone-100"
               >
-                <div className={`w-20 h-20 rounded-full bg-white flex items-center justify-center mb-8 group-hover:bg-primary group-hover:scale-110 transition-all duration-700 shadow-sm`}>
-                   <usp.icon className={`w-8 h-8 ${usp.color}`} />
+                <div className={`w-12 h-12 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center mb-4 md:mb-8 group-hover:bg-primary group-hover:scale-110 transition-all duration-700 shadow-sm`}>
+                   <usp.icon className={`w-6 h-6 md:w-8 md:h-8 ${usp.color}`} />
                 </div>
-                <h3 className="text-lg font-black text-primary mb-2 uppercase tracking-widest">{usp.title}</h3>
-                <p className="text-primary/40 text-[10px] font-black uppercase tracking-[0.2em]">{usp.desc}</p>
+                <h3 className="text-[10px] md:text-lg font-black text-primary mb-1 uppercase tracking-widest">{usp.title}</h3>
+                <p className="text-primary/40 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">{usp.desc}</p>
               </motion.div>
             ))}
           </div>
@@ -151,7 +151,7 @@ export default function Home() {
                 <div className="w-8 h-[1px] bg-primary" />
                 <span className="text-primary font-black tracking-[0.3em] uppercase text-[10px]">Top Rated Selections</span>
               </div>
-              <h2 className="text-2xl md:text-4xl font-playfair font-black text-primary leading-tight mb-4 whitespace-nowrap">
+              <h2 className="text-4xl md:text-4xl font-playfair font-black text-primary leading-tight mb-4 whitespace-nowrap">
                 Curated <span className="text-secondary italic">Bestsellers</span>
               </h2>
               <p className="text-primary/40 text-[13px] leading-relaxed font-black max-w-xl uppercase tracking-widest">

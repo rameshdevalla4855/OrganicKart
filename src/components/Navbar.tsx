@@ -8,7 +8,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/firebase/firebaseInit';
-import { ShoppingCart, User as UserIcon, LogOut, Search, Menu, X, ChevronDown, LayoutDashboard, Heart, Settings } from 'lucide-react';
+import { ShoppingCart, User as UserIcon, LogOut, Search, Menu, X, ChevronDown, LayoutDashboard, Heart, Settings, ChevronLeft } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import Logo from './Logo';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -64,6 +64,16 @@ export default function Navbar() {
         scrolled ? 'bg-white/80 backdrop-blur-xl shadow-soft border-stone-200' : 'bg-white border-stone-100'
       }`}>
         <nav className="max-w-full mx-auto px-6 md:px-12 h-20 md:h-40 flex items-center justify-between">
+          {/* Mobile Back Button */}
+          {pathname !== '/' && (
+            <button 
+              onClick={() => router.back()}
+              className="lg:hidden p-3 -ml-3 text-primary/60 hover:text-primary transition-all active:scale-90"
+            >
+              <ChevronLeft className="w-7 h-7" />
+            </button>
+          )}
+
           {/* Logo Section - Positioned to the complete left */}
           <div className="flex-shrink-0 flex items-center pr-8">
             <Logo variant="navbar" className="transition-all duration-500" />

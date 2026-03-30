@@ -30,7 +30,7 @@ export default function Footer() {
             </p>
             <div className="flex space-x-4">
               {[
-                { icon: FaInstagram, href: "#" },
+                { icon: FaInstagram, href: "https://www.instagram.com/shrestaorganics?igsh=MTg5Ym82dTNuOGl5MQ==" },
                 { icon: FaFacebookF, href: "#" },
                 { icon: FaTwitter, href: "#" },
                 { icon: FaYoutube, href: "#" }
