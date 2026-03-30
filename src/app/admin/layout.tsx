@@ -150,11 +150,19 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       </motion.aside>
 
       {/* MOBILE HEADER */}
-      <div className="lg:hidden fixed top-0 inset-x-0 h-16 bg-white border-b border-slate-200 z-[60] flex items-center justify-between px-6">
-         <Logo variant="navbar" className="scale-75 origin-left" />
+      <div className="lg:hidden fixed top-0 inset-x-0 h-20 bg-white/80 backdrop-blur-xl border-b border-slate-200 z-[60] flex items-center justify-between px-6">
+         <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-primary rounded-xl flex items-center justify-center text-white shadow-premium">
+               <ShieldCheck className="w-6 h-6" />
+            </div>
+            <div>
+               <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/40 leading-none mb-1">Admin Panel</p>
+               <p className="text-[13px] font-black text-primary leading-none tracking-tight">Shresta Control</p>
+            </div>
+         </div>
          <button 
            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-           className="p-2 bg-slate-50 rounded-lg text-slate-600"
+           className="p-3 bg-slate-50 text-slate-600 rounded-2xl border border-slate-100 active:scale-95 transition-all"
          >
            {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
          </button>
@@ -164,29 +172,44 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <AnimatePresence>
          {isMobileMenuOpen && (
            <motion.div 
-             initial={{ opacity: 0, y: -20 }}
-             animate={{ opacity: 1, y: 0 }}
-             exit={{ opacity: 0, y: -20 }}
-             className="lg:hidden fixed inset-0 z-50 bg-white pt-24 px-6 flex flex-col"
+             initial={{ opacity: 0, x: -20, filter: 'blur(10px)' }}
+             animate={{ opacity: 1, x: 0, filter: 'blur(0px)' }}
+             exit={{ opacity: 0, x: -20, filter: 'blur(10px)' }}
+             className="lg:hidden fixed inset-0 z-50 bg-white/95 backdrop-blur-2xl pt-28 px-6 flex flex-col"
            >
-              <nav className="space-y-4">
-                 {navLinks.map((link) => (
-                   <Link 
-                     key={link.name} 
-                     href={link.href} 
-                     onClick={() => setIsMobileMenuOpen(false)}
-                     className={`flex items-center p-5 rounded-2xl text-xl font-black uppercase tracking-[0.1em] ${pathname === link.href ? 'bg-primary text-white shadow-premium' : 'text-slate-800 bg-slate-50'}`}
+              <nav className="space-y-3">
+                 {navLinks.map((link, i) => (
+                   <motion.div
+                     key={link.name}
+                     initial={{ opacity: 0, x: -20 }}
+                     animate={{ opacity: 1, x: 0 }}
+                     transition={{ delay: i * 0.05 }}
                    >
-                     <link.icon className="w-6 h-6 mr-6" /> {link.name}
-                   </Link>
+                     <Link 
+                       href={link.href} 
+                       onClick={() => setIsMobileMenuOpen(false)}
+                       className={`flex items-center p-5 rounded-[1.5rem] transition-all border ${
+                         pathname === link.href 
+                           ? 'bg-primary text-white border-primary shadow-premium' 
+                           : 'text-slate-600 bg-slate-50 border-transparent active:bg-slate-100'
+                       }`}
+                     >
+                       <link.icon className={`w-6 h-6 mr-6 ${pathname === link.href ? 'text-white' : 'text-slate-400'}`} />
+                       <span className="text-[15px] font-black uppercase tracking-[0.1em]">{link.name}</span>
+                     </Link>
+                   </motion.div>
                  ))}
               </nav>
-              <div className="mt-auto pb-12 grid grid-cols-2 gap-4">
-                 <Link href="/" className="flex items-center justify-center p-5 bg-slate-100 rounded-2xl font-black uppercase tracking-widest text-slate-500">
-                    <ExternalLink className="w-5 h-5 mr-3" /> Store
+              
+              <div className="mt-auto pb-12 space-y-3">
+                 <Link href="/" className="flex items-center justify-center p-5 bg-slate-100 rounded-2xl font-black uppercase tracking-widest text-slate-500 text-xs">
+                    <ExternalLink className="w-4 h-4 mr-3" /> View Marketplace
                  </Link>
-                 <button onClick={() => signOut(auth)} className="flex items-center justify-center p-5 bg-red-50 rounded-2xl font-black uppercase tracking-widest text-red-500">
-                    <LogOut className="w-5 h-5 mr-3" /> Exit
+                 <button 
+                   onClick={() => signOut(auth)} 
+                   className="w-full flex items-center justify-center p-5 bg-red-50 rounded-2xl font-black uppercase tracking-widest text-red-500 text-xs border border-red-100 active:bg-red-500 active:text-white transition-all"
+                 >
+                    <LogOut className="w-4 h-4 mr-3" /> Terminate Session
                  </button>
               </div>
            </motion.div>
@@ -230,7 +253,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
              </div>
           </header>
 
-          <div className="p-8 lg:p-12">
+          <div className="p-4 lg:p-12 pb-24 lg:pb-12">
             {children}
           </div>
         </div>

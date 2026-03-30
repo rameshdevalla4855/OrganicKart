@@ -62,23 +62,23 @@ export default function AdminDashboard() {
   return (
     <div className="space-y-12">
       {/* Dashboard Greeting Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 px-4 md:px-0">
          <div className="space-y-3">
             <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-primary/40 flex items-center">
                <Activity className="w-3.5 h-3.5 mr-2" /> Live Analytics Stream
             </h2>
-            <h1 className="text-4xl md:text-5xl font-playfair font-black text-slate-900 leading-tight italic">
+            <h1 className="text-3xl md:text-5xl font-playfair font-black text-slate-900 leading-tight italic">
                The <span className="text-primary">Executive Overlook</span>
             </h1>
          </div>
-         <div className="flex items-center space-x-3 bg-white p-3 rounded-2xl border border-slate-100 shadow-soft">
+         <div className="flex items-center space-x-3 bg-white p-3 rounded-2xl border border-slate-100 shadow-soft self-start md:self-auto">
             <div className="w-3 h-3 bg-emerald-500 rounded-full animate-pulse" />
-            <span className="text-[11px] font-black uppercase tracking-widest text-slate-500">System Online: Live Data</span>
+            <span className="text-[11px] font-black uppercase tracking-widest text-slate-500">System Online</span>
          </div>
       </div>
 
       {/* PRIMARY METRIC GRID */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
          {metrics.map((stat, i) => (
             <motion.div
                key={stat.label}
@@ -107,7 +107,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
          
          {/* Main Chart Section (Simulated Pro Chart) */}
-         <div className="lg:col-span-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-10 relative overflow-hidden group">
+         <div className="lg:col-span-8 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-6 md:p-10 relative overflow-hidden group">
             <div className="flex items-center justify-between mb-12">
                <div>
                   <h4 className="text-xl font-black text-slate-900 tracking-tight flex items-center mb-1 leading-none uppercase italic">
@@ -163,7 +163,7 @@ export default function AdminDashboard() {
          </div>
 
          {/* Inventory Low-Stock Hub */}
-         <div className="lg:col-span-4 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-10 flex flex-col">
+         <div className="lg:col-span-4 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-6 md:p-10 flex flex-col">
             <div className="flex items-center justify-between mb-10">
                <div>
                   <h4 className="text-xl font-black text-slate-900 uppercase italic leading-none mb-1">Inventory Alert</h4>
@@ -207,7 +207,7 @@ export default function AdminDashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pb-20">
          
          {/* Live Order Stream */}
-         <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-10 overflow-hidden relative group">
+         <div className="lg:col-span-2 bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-6 md:p-10 overflow-hidden relative group">
             <div className="flex items-center justify-between mb-12">
                <div>
                   <h4 className="text-xl font-black text-slate-900 uppercase italic">Live Harvest Operations</h4>
@@ -265,7 +265,7 @@ export default function AdminDashboard() {
          </div>
 
          {/* Technical Diagnostics Overlay */}
-         <div className="bg-primary text-white rounded-[2.5rem] shadow-premium p-10 relative overflow-hidden group">
+         <div className="bg-primary text-white rounded-[2.5rem] shadow-premium p-6 md:p-10 relative overflow-hidden group">
             <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
             <div className="relative z-10 flex flex-col h-full">
                <div className="flex items-center justify-between mb-10">

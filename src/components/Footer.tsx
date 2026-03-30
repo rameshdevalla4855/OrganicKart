@@ -82,11 +82,11 @@ export default function Footer() {
             <div className="space-y-6">
                <div>
                   <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Direct Line</p>
-                  <p className="text-sm font-black text-white tracking-widest">+91 98765 43210</p>
+                  <p className="text-sm font-black text-white tracking-widest">+91 9573485548</p>
                </div>
                <div>
                   <p className="text-[10px] font-black text-white/30 uppercase tracking-widest mb-1">Digital Mail</p>
-                  <p className="text-sm font-black text-white tracking-widest">shrestaarogya@gmail.com</p>
+                  <p className="text-sm font-black text-white tracking-widest">shrestaarogya18@gmail.com</p>
                </div>
             </div>
           </div>

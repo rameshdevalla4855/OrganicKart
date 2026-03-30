@@ -15,6 +15,31 @@ const Hero = dynamic(() => import("@/components/home/Hero"), {
   ssr: true,
   loading: () => <div className="h-[65vh] bg-stone-900 animate-pulse" /> 
 });
+
+const CategoryMobile = () => {
+  const categories = [
+    { name: 'Oils', icon: '🫗', color: 'bg-amber-50' },
+    { name: 'Grains', icon: '🌾', color: 'bg-emerald-50' },
+    { name: 'Spices', icon: '🌶️', color: 'bg-red-50' },
+    { name: 'Seeds', icon: '🌻', color: 'bg-yellow-50' },
+    { name: 'Honey', icon: '🍯', color: 'bg-orange-50' },
+    { name: 'Millets', icon: '🌽', color: 'bg-stone-50' }
+  ];
+
+  return (
+    <div className="lg:hidden flex overflow-x-auto sb-hide px-6 py-6 space-x-6 bg-white border-b border-stone-50">
+      {categories.map((cat) => (
+        <Link key={cat.name} href={`/products?category=${cat.name}`} className="flex flex-col items-center flex-shrink-0">
+          <div className={`w-14 h-14 rounded-full ${cat.color} flex items-center justify-center text-xl shadow-sm border border-black/5`}>
+            {cat.icon}
+          </div>
+          <span className="mt-2 text-[10px] font-black uppercase tracking-widest text-primary/60">{cat.name}</span>
+        </Link>
+      ))}
+    </div>
+  );
+};
+
 const CollectionSlider = dynamic(() => import("@/components/home/CollectionSlider"), { 
   ssr: true,
   loading: () => <div className="h-96 bg-stone-50 animate-pulse" />
@@ -73,6 +98,9 @@ export default function Home() {
 
       {/* Hero Section */}
       <Hero />
+
+      {/* Professional Mobile Categories */}
+      <CategoryMobile />
 
       {/* Dynamic Collection Slider - Positioned under the banner */}
       <div className="bg-white">
@@ -137,7 +165,7 @@ export default function Home() {
             </Link>
           </div>
         {loading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
             {[1, 2, 3, 4].map((i) => (
               <ProductSkeleton key={i} />
             ))}
@@ -148,7 +176,7 @@ export default function Home() {
              <Link href="/admin/products" className="px-8 py-3 bg-primary text-white rounded-full font-bold">Add Your First Product →</Link>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
             {bestsellers.map((product, i) => (
               <motion.div
                 key={product.id}

@@ -138,7 +138,7 @@ export default function AdminProducts() {
             <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-primary/40 flex items-center">
                <Layers className="w-3.5 h-3.5 mr-2" /> Storage Inventory Hub
             </h2>
-            <h1 className="text-4xl md:text-5xl font-playfair font-black text-slate-900 italic">
+            <h1 className="text-3xl lg:text-5xl font-playfair font-black text-slate-900 italic">
                Inventory <span className="text-primary">Controller</span>
             </h1>
          </div>
@@ -160,15 +160,15 @@ export default function AdminProducts() {
             
             <button 
               onClick={() => handleOpenModal()}
-              className="flex items-center px-10 py-5 bg-primary text-white rounded-3xl text-[10px] font-black uppercase tracking-[0.2em] shadow-premium hover:shadow-xl hover:bg-primary/90 transition-all active:scale-95"
+              className="flex-grow lg:flex-none flex items-center justify-center px-10 py-5 bg-primary text-white rounded-3xl text-[10px] font-black uppercase tracking-[0.2em] shadow-premium hover:shadow-xl hover:bg-primary/90 transition-all active:scale-95"
             >
-               <Plus className="w-4.5 h-4.5 mr-3" /> Register New Harvest
+               <Plus className="w-4.5 h-4.5 mr-3" /> New Harvest
             </button>
          </div>
       </div>
 
       {/* FILTER & SEARCH COMMAND CENTER */}
-      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-10">
+      <div className="bg-white rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 shadow-soft p-6 lg:p-10">
          <div className="flex flex-col lg:flex-row gap-6">
             <div className="relative group flex-1">
                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-primary transition-colors" />
@@ -195,8 +195,61 @@ export default function AdminProducts() {
             </div>
          </div>
 
-         {/* ADVANCED DATA TABLE */}
-         <div className="mt-12 overflow-x-auto no-scrollbar">
+         {/* MOBILE CARD VIEW */}
+         <div className="lg:hidden mt-8 space-y-4">
+            <AnimatePresence mode="popLayout">
+               {filteredProducts.map((p: any) => (
+                  <motion.div 
+                    key={p.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="p-5 bg-slate-50 rounded-[2rem] border border-slate-100 shadow-sm"
+                  >
+                     <div className="flex items-center space-x-4 mb-4">
+                        <div className="relative w-16 h-16 rounded-2xl overflow-hidden shadow-soft flex-shrink-0 bg-white">
+                           <Image src={p.image_url || '/placeholder.svg'} alt={p.name} fill className="object-cover" />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                           <h4 className="text-[13px] font-black text-slate-900 truncate">{p.name}</h4>
+                           <span className="text-[9px] font-black text-slate-300 uppercase tracking-widest">SKU-{p.id.slice(0, 8)}</span>
+                        </div>
+                        <span className="px-3 py-1.5 bg-white border border-slate-100 rounded-full text-[9px] font-black text-slate-500 uppercase tracking-widest">{p.category}</span>
+                     </div>
+                     
+                     <div className="grid grid-cols-2 gap-4 pb-4 border-b border-white">
+                        <div className="bg-white p-3 rounded-2xl">
+                           <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mb-1">Pricing</p>
+                           <p className="text-sm font-black text-slate-900">₹{p.price}</p>
+                        </div>
+                        <div className="bg-white p-3 rounded-2xl">
+                           <p className="text-[8px] font-black text-slate-300 uppercase tracking-widest mb-1">Stock</p>
+                           <p className={`text-sm font-black ${p.stock_count < 10 ? 'text-amber-500' : 'text-slate-900'}`}>{p.stock_count || 0}</p>
+                        </div>
+                     </div>
+                     
+                     <div className="flex items-center justify-between pt-4">
+                        <div className="flex items-center space-x-2 text-[9px] font-black uppercase tracking-widest text-emerald-500">
+                           <div className="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse" />
+                           <span>Active</span>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                           <button onClick={() => handleOpenModal(p)} className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 active:scale-95 transition-all">
+                              <Edit3 className="w-4 h-4" />
+                           </button>
+                           <button onClick={() => handleDelete(p.id)} className="p-3 bg-white border border-slate-200 rounded-xl text-slate-400 active:scale-95 transition-all">
+                              <Trash2 className="w-4 h-4 text-red-400" />
+                           </button>
+                        </div>
+                     </div>
+                  </motion.div>
+               ))}
+            </AnimatePresence>
+         </div>
+
+         {/* DESKTOP DATA TABLE */}
+         <div className="hidden lg:block mt-12 overflow-x-auto no-scrollbar">
             <table className="w-full min-w-[1000px]">
                <thead>
                   <tr className="border-b border-slate-50">

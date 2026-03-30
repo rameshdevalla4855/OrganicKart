@@ -62,7 +62,7 @@ export default function AdminOrders() {
             <h2 className="text-[10px] font-black uppercase tracking-[0.5em] text-primary/40 flex items-center">
                <Activity className="w-3.5 h-3.5 mr-2" /> Global Logistics Flow
             </h2>
-            <h1 className="text-4xl md:text-5xl font-playfair font-black text-slate-900 italic">
+            <h1 className="text-3xl lg:text-5xl font-playfair font-black text-slate-900 italic">
                Order <span className="text-primary">Pipeline</span>
             </h1>
          </div>
@@ -83,7 +83,7 @@ export default function AdminOrders() {
       </div>
 
       {/* COMMAND CENTER: FILTER & SEARCH */}
-      <div className="bg-white rounded-[2.5rem] border border-slate-100 shadow-soft p-10">
+      <div className="bg-white rounded-[2rem] lg:rounded-[2.5rem] border border-slate-100 shadow-soft p-6 lg:p-10">
          <div className="flex flex-col lg:flex-row items-center gap-6 mb-12">
             <div className="relative group flex-grow w-full">
                <Search className="absolute left-6 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-300 group-focus-within:text-primary" />
@@ -109,8 +109,74 @@ export default function AdminOrders() {
             </div>
          </div>
 
-         {/* PROFESSIONAL LOGISTICS GRID */}
-         <div className="overflow-x-auto no-scrollbar">
+         {/* MOBILE ORDER CARDS */}
+         <div className="lg:hidden mt-8 space-y-4">
+            <AnimatePresence mode="popLayout">
+               {filteredOrders.map((order: any) => (
+                  <motion.div 
+                    key={order.id}
+                    layout
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, x: -20 }}
+                    className="p-6 bg-slate-50 rounded-[2rem] border border-slate-100 shadow-sm"
+                  >
+                     <div className="flex items-center justify-between mb-4">
+                        <div className="flex items-center space-x-3">
+                           <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-primary shadow-soft">
+                              <ShoppingCart className="w-5 h-5" />
+                           </div>
+                           <span className="text-[13px] font-black text-slate-900 leading-tight">#{order.orderId || order.id.slice(0, 8)}</span>
+                        </div>
+                        <span className={`flex items-center px-3 py-1.5 rounded-full text-[8px] font-black uppercase tracking-widest ${
+                           order.orderStatus === 'delivered' ? 'bg-emerald-50 text-emerald-600' :
+                           order.orderStatus === 'shipped' ? 'bg-indigo-50 text-indigo-600' :
+                           'bg-amber-50 text-amber-600'
+                        }`}>
+                           {order.orderStatus}
+                        </span>
+                     </div>
+                     
+                     <div className="space-y-4 mb-6">
+                        <div className="flex items-start space-x-3">
+                           <MapPin className="w-4 h-4 text-slate-300 mt-1" />
+                           <p className="text-[11px] font-bold text-slate-500 leading-relaxed uppercase tracking-tighter line-clamp-2">{order.shippingAddress || 'No Address Provided'}</p>
+                        </div>
+                        <div className="flex items-center space-x-3 text-[11px] font-black text-slate-900 border-t border-white pt-4">
+                           <span className="flex-1 italic">Total Harvest: ₹{order.total || 0}</span>
+                           <span className="text-secondary tracking-widest uppercase text-[9px]">{order.items?.length || 0} Units</span>
+                        </div>
+                     </div>
+                     
+                     <div className="flex items-center space-x-2">
+                        <div className="relative group/menu flex-1">
+                           <button className="w-full flex items-center justify-center space-x-2 py-4 bg-white text-primary border border-slate-200 rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-soft">
+                              {statusLoading === order.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <>Update Status <ChevronDown className="ml-2 w-4 h-4" /></>}
+                           </button>
+                           {/* Mobile Dropdown Logic */}
+                           <div className="absolute left-0 bottom-full mb-2 w-full bg-white border border-slate-100 rounded-2xl shadow-premium opacity-0 group-hover/menu:opacity-100 pointer-events-none group-hover/menu:pointer-events-auto transition-all z-20 py-2">
+                              {['Placed', 'Processing', 'Shipped', 'Delivered'].map(status => (
+                                 <button 
+                                   key={status}
+                                   onClick={() => handleUpdateStatus(order.id, status.toLowerCase())}
+                                   className="w-full text-center py-4 text-[10px] font-black uppercase tracking-widest text-slate-500 hover:text-primary hover:bg-slate-50"
+                                 >
+                                    Move To {status}
+                                 </button>
+                              ))}
+                           </div>
+                        </div>
+                        <button className="p-4 bg-slate-900 text-white rounded-2xl shadow-premium active:scale-95 transition-all">
+                           <Eye className="w-5 h-5" />
+                        </button>
+                     </div>
+                  </motion.div>
+               ))}
+            </AnimatePresence>
+         </div>
+
+         {/* PROFESSIONAL LOGISTICS GRID (Desktop) */}
+         <div className="hidden lg:block overflow-x-auto no-scrollbar">
             <table className="w-full min-w-[1100px]">
                <thead>
                   <tr className="border-b border-slate-50">
@@ -181,7 +247,7 @@ export default function AdminOrders() {
                              <div className="flex items-center justify-end space-x-2">
                                 <div className="relative group/menu">
                                    <button className="flex items-center px-6 py-3 bg-white text-primary border border-slate-100 rounded-xl text-[10px] font-black uppercase tracking-[0.2em] shadow-soft hover:shadow-premium transition-all">
-                                      {statusLoading === order.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <>Update Node <ChevronDown className="ml-2 w-3.5 h-3.5" /></>}
+                                      {statusLoading === order.id ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <>Update Node <ChevronDown className="ml-2 w-4 h-4" /></>}
                                    </button>
                                    
                                    {/* Status Dropdown */}

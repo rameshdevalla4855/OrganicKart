@@ -63,7 +63,7 @@ export default function Navbar() {
       <header className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-500 border-b ${
         scrolled ? 'bg-white/80 backdrop-blur-xl shadow-soft border-stone-200' : 'bg-white border-stone-100'
       }`}>
-        <nav className="max-w-full mx-auto px-6 md:px-12 h-28 md:h-40 flex items-center justify-between">
+        <nav className="max-w-full mx-auto px-6 md:px-12 h-20 md:h-40 flex items-center justify-between">
           {/* Logo Section - Positioned to the complete left */}
           <div className="flex-shrink-0 flex items-center pr-8">
             <Logo variant="navbar" className="transition-all duration-500" />
