@@ -100,114 +100,109 @@ function ProfileContent() {
   const selectedOrder = MOCK_ORDERS.find(o => o.id === selectedOrderId);
 
   return (
-    <div className="min-h-screen bg-[#FDFCFB] pt-32 pb-24">
-      <div className="max-w-7xl mx-auto px-6 md:px-12">
+    <div className="min-h-screen bg-[#F7F4EF] pt-28 pb-24">
+      <div className="max-w-screen-lg mx-auto px-4">
         
         {/* Profile Branding Header */}
-        <div className="mb-16">
-           <div className="flex items-center space-x-3 mb-4">
-              <div className="w-8 h-[1px] bg-primary" />
-              <span className="text-[10px] font-black uppercase tracking-[0.4em] text-primary/40">Marketplace Identity</span>
-           </div>
-           <h1 className="text-4xl md:text-6xl font-playfair font-black text-primary italic">
-              User <span className="text-secondary">Dashboard</span>
+        <div className="mb-12">
+           <h1 className="text-4xl md:text-5xl font-playfair font-bold text-[#1B4332]">
+              My Account
            </h1>
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12">
           
-          {/* Dashboard Sidebar - Hidden on mobile if a tab is active (except the main profile menu if we consider it as such) */}
+          {/* Dashboard Sidebar - Hidden on mobile if a tab is active */}
           <aside className={`lg:col-span-3 space-y-2 ${activeTab !== 'menu' ? 'hidden lg:block' : 'block'}`}>
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => { setActiveTab(tab.id); setSelectedOrderId(null); }}
-                className={`w-full flex items-center justify-between p-5 rounded-[1.5rem] transition-all duration-500 group ${
-                  activeTab === tab.id 
-                    ? 'bg-primary text-white shadow-premium' 
-                    : 'bg-white text-primary/60 border border-stone-100 hover:bg-stone-50'
-                }`}
-              >
-                <div className="flex items-center space-x-4">
-                   <tab.icon className={`w-5 h-5 ${activeTab === tab.id ? 'text-white' : 'text-primary/20 group-hover:text-primary'} transition-colors`} />
-                   <span className="text-xs font-black uppercase tracking-widest">{tab.label}</span>
-                </div>
-                <ChevronRight className={`w-4 h-4 transition-transform ${activeTab === tab.id ? 'rotate-90 lg:rotate-0' : ''}`} />
-              </button>
-            ))}
-            
-            <div className="pt-8 border-t border-stone-100 mt-8">
-               <button 
-                 onClick={handleLogout}
-                 className="w-full flex items-center justify-between p-5 rounded-[1.5rem] bg-red-50 text-red-500 hover:bg-red-600 hover:text-white transition-all duration-500 group"
-               >
-                 <div className="flex items-center space-x-4">
-                    <LogOut className="w-5 h-5 opacity-50 group-hover:opacity-100" />
-                    <span className="text-xs font-black uppercase tracking-widest">Logout Account</span>
-                 </div>
-               </button>
+            <div className="bg-white rounded-2xl border border-stone-100 p-4 shadow-sm">
+               {tabs.map((tab) => (
+                 <button
+                   key={tab.id}
+                   onClick={() => { setActiveTab(tab.id); setSelectedOrderId(null); }}
+                   className={`w-full flex items-center p-3.5 rounded-xl transition-all duration-300 group mb-1 last:mb-0 ${
+                     activeTab === tab.id 
+                       ? 'bg-[#1B4332] text-white shadow-sm' 
+                       : 'bg-transparent text-stone-500 hover:bg-[#F7F4EF] hover:text-[#1B4332]'
+                   }`}
+                 >
+                   <div className="flex items-center space-x-3">
+                      <tab.icon className={`w-4 h-4 ${activeTab === tab.id ? 'text-white' : 'text-stone-400 group-hover:text-[#1B4332]'} transition-colors`} />
+                      <span className="text-[11px] font-black uppercase tracking-widest">{tab.label}</span>
+                   </div>
+                 </button>
+               ))}
+               
+               <div className="pt-4 border-t border-stone-100 mt-4">
+                  <button 
+                    onClick={handleLogout}
+                    className="w-full flex items-center p-3.5 rounded-xl text-red-500 hover:bg-red-50 transition-all duration-300 group"
+                  >
+                    <div className="flex items-center space-x-3">
+                       <LogOut className="w-4 h-4" />
+                       <span className="text-[11px] font-black uppercase tracking-widest">Sign Out</span>
+                    </div>
+                  </button>
+               </div>
             </div>
           </aside>
 
           {/* Main Dashboard Content - Mobile Back Button added */}
           <main className={`lg:col-span-9 ${activeTab === 'menu' ? 'hidden lg:block' : 'block'}`}>
             {/* Mobile Back Button */}
-            <div className="lg:hidden mb-10">
+            <div className="lg:hidden mb-6">
                <button 
                  onClick={() => { setActiveTab('menu'); setSelectedOrderId(null); }}
-                 className="flex items-center space-x-4 text-[10px] font-black text-primary/40 uppercase tracking-[0.3em] group"
+                 className="flex items-center text-[10px] font-black text-stone-500 hover:text-[#1B4332] uppercase tracking-widest transition-colors"
                >
-                  <div className="w-12 h-12 rounded-full border border-stone-100 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
-                     <ChevronLeft className="w-5 h-5" />
-                  </div>
-                  <span>Return to Menu</span>
+                  <ChevronLeft className="w-4 h-4 mr-1" />
+                  Return to Menu
                </button>
             </div>
             <AnimatePresence mode="wait">
               {activeTab === 'profile' && (
                 <motion.div
                   key="profile"
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="space-y-8"
+                  exit={{ opacity: 0, y: -10 }}
+                  className="space-y-6"
                 >
-                  <div className="bg-white rounded-[2.5rem] border border-stone-100 shadow-soft p-10 md:p-14">
-                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-8 mb-12">
-                        <div className="flex items-center space-x-8">
-                           <div className="w-24 h-24 rounded-full bg-primary flex items-center justify-center text-white text-3xl font-black shadow-premium ring-8 ring-primary/5">
+                  <div className="bg-white rounded-3xl border border-stone-100 shadow-sm p-8">
+                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                        <div className="flex items-center space-x-6">
+                           <div className="w-20 h-20 rounded-full bg-[#1B4332] flex items-center justify-center text-white text-2xl font-bold shadow-sm">
                               {userData?.fullName?.charAt(0) || 'U'}
                            </div>
                            <div>
-                              <h3 className="text-3xl font-playfair font-black text-primary mb-1 italic">
+                              <h3 className="text-2xl font-playfair font-bold text-[#1B4332] mb-1">
                                 {userData?.name || userData?.fullName || 'Organic Enthusiast'}
                               </h3>
-                              <p className="text-[10px] font-black uppercase tracking-[0.2em] text-primary/40 flex items-center">
-                                 <ShieldCheck className="w-3.5 h-3.5 mr-2 text-primary" /> Verified Harvest Member
+                              <p className="text-[10px] font-black uppercase tracking-widest text-[#DC6827]">
+                                 Verified Member
                               </p>
                            </div>
                         </div>
-                        <button className="px-8 py-3 bg-stone-50 text-primary border border-stone-100 rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-white transition-all">
-                           Edit Detailed Profile
+                        <button className="px-6 py-2.5 border border-stone-200 text-[#1B4332] rounded-full text-[10px] font-black uppercase tracking-widest hover:bg-[#F7F4EF] transition-all self-start md:self-center">
+                           Edit Profile
                         </button>
                      </div>
 
-                     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-12 border-t border-stone-50">
-                        <div className="space-y-1">
-                           <p className="text-[9px] font-black text-primary/30 uppercase tracking-[0.3em]">Full Biological Name</p>
-                           <p className="text-sm font-black text-primary">{userData?.name || userData?.fullName || 'Not Provided'}</p>
+                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pt-8 border-t border-stone-100">
+                        <div className="bg-[#F7F4EF] p-5 rounded-2xl">
+                           <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest mb-1.5">Full Name</p>
+                           <p className="text-sm font-bold text-[#1B4332]">{userData?.name || userData?.fullName || 'Not Provided'}</p>
                         </div>
-                        <div className="space-y-1">
-                           <p className="text-[9px] font-black text-primary/30 uppercase tracking-[0.3em]">Electronic Mail Address</p>
-                           <p className="text-sm font-black text-primary">{user?.email}</p>
+                        <div className="bg-[#F7F4EF] p-5 rounded-2xl">
+                           <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest mb-1.5">Email Address</p>
+                           <p className="text-sm font-bold text-[#1B4332]">{user?.email}</p>
                         </div>
-                        <div className="space-y-1">
-                           <p className="text-[9px] font-black text-primary/30 uppercase tracking-[0.3em]">Account Role</p>
-                           <p className="text-sm font-black text-accent uppercase tracking-widest">{userData?.role}</p>
+                        <div className="bg-[#F7F4EF] p-5 rounded-2xl">
+                           <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest mb-1.5">Account Role</p>
+                           <p className="text-sm font-bold text-[#DC6827] uppercase tracking-widest">{userData?.role}</p>
                         </div>
-                        <div className="space-y-1">
-                           <p className="text-[9px] font-black text-primary/30 uppercase tracking-[0.3em]">Member Since</p>
-                           <p className="text-sm font-black text-primary">January 2024</p>
+                        <div className="bg-[#F7F4EF] p-5 rounded-2xl">
+                           <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest mb-1.5">Member Since</p>
+                           <p className="text-sm font-bold text-[#1B4332]">January 2024</p>
                         </div>
                      </div>
                   </div>
@@ -217,155 +212,140 @@ function ProfileContent() {
               {activeTab === 'orders' && !selectedOrderId && (
                 <motion.div
                   key="orders-list"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="space-y-4"
                 >
-                  <div className="grid gap-6">
-                    {MOCK_ORDERS.map((order) => (
-                      <div key={order.id} className="bg-white rounded-[2rem] border border-stone-100 shadow-soft p-8 md:p-10 flex flex-col md:flex-row md:items-center justify-between gap-10 group hover:border-primary/20 transition-all">
-                        <div className="flex items-start space-x-6">
-                           <div className="w-16 h-16 rounded-2xl bg-stone-50 flex items-center justify-center text-primary/20">
-                              <Package className="w-8 h-8" />
-                           </div>
-                           <div>
-                              <div className="flex items-center space-x-3 mb-2">
-                                 <h4 className="text-lg font-black text-primary tracking-tight">{order.id}</h4>
-                                 <span className={`px-4 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${order.status === 'Delivered' ? 'bg-green-50 text-green-600' : 'bg-primary/5 text-primary'}`}>
-                                    {order.status}
-                                 </span>
-                              </div>
-                              <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest mb-4">Ordered on {order.date}</p>
-                              <div className="flex flex-wrap gap-2">
-                                 {order.items.map(p => (
-                                    <span key={p.name} className="text-[10px] font-black px-3 py-1 bg-stone-50 rounded-lg text-primary/40 border border-stone-100">{p.name}</span>
-                                 ))}
-                              </div>
-                           </div>
-                        </div>
-                        <div className="flex items-center justify-between md:flex-col md:items-end gap-4 min-w-[120px]">
-                           <div className="text-right">
-                              <p className="text-[10px] font-black text-primary/30 uppercase tracking-tight">Total Amount</p>
-                              <p className="text-xl font-black text-primary tracking-tighter">₹{order.total}</p>
-                           </div>
-                           <button 
-                             onClick={() => setSelectedOrderId(order.id)}
-                             className="flex items-center text-[10px] font-black text-primary uppercase tracking-[0.2em] group border-b border-primary/20 pb-1"
-                           >
-                              View Milestone <ArrowRight className="ml-2 w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
-                           </button>
-                        </div>
+                  {MOCK_ORDERS.map((order) => (
+                    <div key={order.id} className="bg-white rounded-3xl border border-stone-100 shadow-sm p-6 md:p-8 flex flex-col md:flex-row md:items-center justify-between gap-6 transition-all hover:border-[#1B4332]/20">
+                      <div className="flex items-start space-x-6">
+                         <div className="w-14 h-14 rounded-full bg-[#F7F4EF] flex items-center justify-center text-[#1B4332]">
+                            <Package className="w-6 h-6" />
+                         </div>
+                         <div>
+                            <div className="flex items-center space-x-3 mb-1">
+                               <h4 className="text-lg font-bold text-[#1B4332]">{order.id}</h4>
+                               <span className={`px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest ${order.status === 'Delivered' ? 'bg-green-100 text-green-700' : 'bg-[#EAE4D9]/50 text-[#1B4332]'}`}>
+                                  {order.status}
+                               </span>
+                            </div>
+                            <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-3">Ordered on {order.date}</p>
+                            <div className="flex flex-wrap gap-2">
+                               {order.items.map(p => (
+                                  <span key={p.name} className="text-[10px] font-black px-3 py-1.5 bg-[#F7F4EF] rounded-lg text-stone-500">{p.name}</span>
+                               ))}
+                            </div>
+                         </div>
                       </div>
-                    ))}
-                  </div>
+                      <div className="flex items-center justify-between md:flex-col md:items-end gap-4 border-t md:border-t-0 border-stone-100 pt-4 md:pt-0 min-w-[120px]">
+                         <div className="text-right">
+                            <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest mb-0.5">Total</p>
+                            <p className="text-xl font-bold text-[#1B4332]">₹{order.total}</p>
+                         </div>
+                         <button 
+                           onClick={() => setSelectedOrderId(order.id)}
+                           className="flex items-center text-[10px] font-black text-[#1B4332] uppercase tracking-widest hover:text-[#DC6827] transition-colors"
+                         >
+                            View Details <ArrowRight className="ml-2 w-3 h-3" />
+                         </button>
+                      </div>
+                    </div>
+                  ))}
                 </motion.div>
               )}
 
               {activeTab === 'orders' && selectedOrderId && selectedOrder && (
                  <motion.div
                     key="order-detail"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="space-y-8"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-6"
                  >
                     {/* Back Button */}
                     <button 
                       onClick={() => setSelectedOrderId(null)}
-                      className="flex items-center space-x-3 text-[10px] font-black text-primary/40 uppercase tracking-[0.3em] hover:text-primary transition-colors group mb-6"
+                      className="flex items-center text-[10px] font-black text-stone-500 hover:text-[#1B4332] uppercase tracking-widest transition-colors mb-4"
                     >
-                       <div className="w-10 h-10 rounded-full border border-stone-100 flex items-center justify-center group-hover:bg-primary group-hover:text-white transition-all">
-                          <ChevronLeft className="w-5 h-5" />
-                       </div>
-                       <span>Back to History</span>
+                       <ChevronLeft className="w-4 h-4 mr-1" /> Back to Orders
                     </button>
 
                     {/* Milestone Detail Header */}
-                    <div className="bg-white rounded-[2.5rem] border border-stone-100 shadow-soft p-10">
-                       <div className="flex flex-col md:flex-row justify-between gap-10 mb-16 px-4">
-                          <div className="space-y-3">
-                             <h4 className="text-3xl font-playfair font-black text-primary italic">Tracking Harvest <span className="text-secondary">#{selectedOrder.id}</span></h4>
-                             <p className="text-[10px] font-black text-primary/30 uppercase tracking-[0.4em]">Ordered {selectedOrder.date}</p>
+                    <div className="bg-white rounded-3xl border border-stone-100 shadow-sm p-8">
+                       <div className="flex flex-col md:flex-row justify-between gap-6 mb-12">
+                          <div className="space-y-2">
+                             <h4 className="text-2xl font-playfair font-bold text-[#1B4332]">Order <span className="text-[#DC6827]">#{selectedOrder.id}</span></h4>
+                             <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest">Placed on {selectedOrder.date}</p>
                           </div>
-                          <div className="bg-primary/5 p-6 rounded-2xl md:text-right">
-                             <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest mb-1">Total Harvest Value</p>
-                             <p className="text-2xl font-black text-primary">₹{selectedOrder.total}</p>
+                          <div className="bg-[#F7F4EF] p-4 rounded-xl md:text-right">
+                             <p className="text-[9px] font-black text-stone-400 uppercase tracking-widest mb-1">Total</p>
+                             <p className="text-xl font-bold text-[#1B4332]">₹{selectedOrder.total}</p>
                           </div>
                        </div>
 
-                       {/* Flipkart Style Progress Tracker */}
-                       <div className="relative grid grid-cols-1 md:grid-cols-4 gap-12 px-6">
+                       {/* Progress Tracker */}
+                       <div className="relative grid grid-cols-1 md:grid-cols-4 gap-8">
                           {/* Progress Line - Desktop */}
-                          <div className="hidden md:block absolute top-[2.2rem] left-20 right-20 h-[2px] bg-stone-100 -z-0">
+                          <div className="hidden md:block absolute top-6 left-16 right-16 h-[2px] bg-stone-100 -z-0">
                              <div 
-                               className="h-full bg-green-500 transition-all duration-1000" 
+                               className="h-full bg-[#1B4332] transition-all duration-1000" 
                                style={{ width: selectedOrder.status === 'Delivered' ? '100%' : '75%' }} 
                              />
                           </div>
                           
                           {selectedOrder.tracking.map((track, i) => (
-                             <div key={track.step} className="relative z-10 flex flex-col items-center text-center space-y-4">
-                                <div className={`w-16 h-16 rounded-full flex items-center justify-center transition-all duration-700 border-4 border-white shadow-premium ${track.completed ? 'bg-green-500 text-white' : track.current ? 'bg-primary text-white animate-pulse' : 'bg-stone-50 text-stone-300'}`}>
-                                   {track.completed ? <CheckCircle2 className="w-8 h-8" /> : track.current ? <Truck className="w-8 h-8" /> : <Clock className="w-8 h-8" />}
+                             <div key={track.step} className="relative z-10 flex flex-col items-center text-center space-y-3">
+                                <div className={`w-12 h-12 rounded-full flex items-center justify-center transition-all bg-white border-4 border-white shadow-sm ${track.completed ? 'text-[#1B4332] bg-[#F7F4EF]' : track.current ? 'text-white bg-[#1B4332]' : 'text-stone-300 bg-stone-50'}`}>
+                                   {track.completed ? <CheckCircle2 className="w-5 h-5" /> : track.current ? <Truck className="w-5 h-5" /> : <Clock className="w-5 h-5" />}
                                 </div>
                                 <div>
-                                   <p className={`text-[12px] font-black uppercase tracking-widest mb-1 ${track.completed || track.current ? 'text-primary' : 'text-primary/20'}`}>{track.step}</p>
-                                   <p className="text-[9px] font-bold text-primary/30 uppercase">{track.date}</p>
+                                   <p className={`text-[10px] font-black uppercase tracking-widest mb-1 ${track.completed || track.current ? 'text-[#1B4332]' : 'text-stone-400'}`}>{track.step}</p>
+                                   <p className="text-[9px] font-bold text-stone-400 uppercase">{track.date}</p>
                                 </div>
                              </div>
                           ))}
                        </div>
                     </div>
 
-                    {/* Context Cards: Shipping & Payment */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                       <div className="bg-white rounded-[2rem] border border-stone-100 p-8">
-                          <div className="flex items-center space-x-3 mb-6">
-                             <MapPin className="w-5 h-5 text-primary" />
-                             <h5 className="text-[11px] font-black uppercase tracking-widest text-primary">Shipping Context</h5>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                       <div className="bg-white rounded-3xl border border-stone-100 p-6 shadow-sm">
+                          <div className="flex items-center space-x-2 mb-4">
+                             <MapPin className="w-4 h-4 text-[#1B4332]" />
+                             <h5 className="text-[10px] font-black uppercase tracking-widest text-[#1B4332]">Shipping Address</h5>
                           </div>
-                          <p className="text-sm font-bold text-primary/60 leading-relaxed uppercase tracking-widest">
+                          <p className="text-sm font-bold text-stone-500 leading-relaxed uppercase tracking-wider">
                              {selectedOrder.shippingAddress}
                           </p>
                        </div>
-                       <div className="bg-white rounded-[2rem] border border-stone-100 p-8">
-                          <div className="flex items-center space-x-3 mb-6">
-                             <CreditCard className="w-5 h-5 text-primary" />
-                             <h5 className="text-[11px] font-black uppercase tracking-widest text-primary">Payment Logistics</h5>
+                       <div className="bg-white rounded-3xl border border-stone-100 p-6 shadow-sm">
+                          <div className="flex items-center space-x-2 mb-4">
+                             <CreditCard className="w-4 h-4 text-[#1B4332]" />
+                             <h5 className="text-[10px] font-black uppercase tracking-widest text-[#1B4332]">Payment Method</h5>
                           </div>
-                          <p className="text-sm font-black text-primary uppercase tracking-widest">
+                          <p className="text-sm font-bold text-stone-500 uppercase tracking-wider">
                              {selectedOrder.paymentMethod}
                           </p>
                        </div>
                     </div>
 
-                    {/* Itemized Harvest List */}
-                    <div className="bg-primary/5 rounded-[2.5rem] p-8 md:p-12">
-                       <h5 className="text-[11px] font-black uppercase tracking-[0.4em] text-primary/40 mb-10 text-center">Harvest Breakdown</h5>
-                       <div className="space-y-6">
+                    <div className="bg-white rounded-3xl border border-stone-100 shadow-sm p-8">
+                       <h5 className="text-[10px] font-black uppercase tracking-widest text-stone-400 mb-6">Order Items</h5>
+                       <div className="space-y-4">
                           {selectedOrder.items.map((item, i) => (
-                             <div key={i} className="flex items-center justify-between p-6 bg-white rounded-2xl border border-stone-100 shadow-soft">
-                                <div className="flex items-center space-x-6">
-                                   <div className="w-12 h-12 rounded-xl bg-stone-50 flex items-center justify-center text-primary/10">
-                                      <Box className="w-6 h-6" />
+                             <div key={i} className="flex items-center justify-between p-4 bg-[#F7F4EF] rounded-xl border border-stone-100">
+                                <div className="flex items-center space-x-4">
+                                   <div className="w-10 h-10 rounded-lg bg-white flex items-center justify-center text-stone-400">
+                                      <Box className="w-5 h-5" />
                                    </div>
                                    <div>
-                                      <h6 className="text-[13px] font-black text-primary uppercase tracking-tight">{item.name}</h6>
-                                      <p className="text-[10px] font-black text-primary/30 uppercase tracking-widest">Quantity: {item.qty}</p>
+                                      <h6 className="text-xs font-bold text-[#1B4332]">{item.name}</h6>
+                                      <p className="text-[9px] font-black text-stone-500 uppercase tracking-widest mt-1">Qty: {item.qty}</p>
                                    </div>
                                 </div>
-                                <p className="text-lg font-black text-primary tracking-tighter">₹{item.price}</p>
+                                <p className="text-sm font-bold text-[#1B4332]">₹{item.price}</p>
                              </div>
                           ))}
-                       </div>
-                       
-                       <div className="mt-12 pt-10 border-t border-primary/5 flex justify-between items-center text-primary">
-                          <div className="flex items-center space-x-4">
-                             <HelpCircle className="w-5 h-5 text-primary/20" />
-                             <span className="text-[10px] font-black uppercase tracking-widest opacity-40">Need help with this harvest?</span>
-                          </div>
-                          <button className="text-[10px] font-black uppercase tracking-[0.3em] text-accent hover:underline">Contact Farm Support</button>
                        </div>
                     </div>
                  </motion.div>
@@ -374,31 +354,26 @@ function ProfileContent() {
               {activeTab === 'address' && (
                  <motion.div
                     key="address"
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    className="grid grid-cols-1 md:grid-cols-2 gap-8"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="grid grid-cols-1 md:grid-cols-2 gap-6"
                  >
-                    <div className="bg-white rounded-[2.5rem] border-2 border-primary shadow-premium p-10 relative overflow-hidden">
-                       <CheckCircle2 className="absolute top-6 right-6 w-6 h-6 text-primary" />
-                       <div className="bg-primary/5 w-12 h-12 rounded-full flex items-center justify-center mb-8">
-                          <MapPin className="w-6 h-6 text-primary" />
-                       </div>
-                       <h4 className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 mb-2">Primary Residence</h4>
-                       <p className="text-lg font-black text-primary mb-6 leading-tight uppercase tracking-tight">Home Sweet Home</p>
-                       <p className="text-sm font-bold text-gray-500 leading-relaxed max-w-[200px] mb-8">
+                    <div className="bg-white rounded-3xl border-2 border-[#1B4332] shadow-sm p-8 relative overflow-hidden">
+                       <CheckCircle2 className="absolute top-5 right-5 w-5 h-5 text-[#1B4332]" />
+                       <h4 className="text-[9px] font-black uppercase tracking-widest text-stone-400 mb-2">Primary Residence</h4>
+                       <p className="text-lg font-bold text-[#1B4332] mb-4">Home</p>
+                       <p className="text-sm font-medium text-stone-500 leading-relaxed max-w-[200px] mb-6">
                           Apartment 402, Green Meadows,<br/>Telangana, Hyderabad<br/>500032
                        </p>
-                       <div className="flex gap-4">
-                          <button className="text-[10px] font-black uppercase tracking-widest text-primary hover:underline">Modify</button>
-                       </div>
+                       <button className="text-[10px] font-black uppercase tracking-widest text-[#1B4332] hover:underline">Edit</button>
                     </div>
 
-                    <button className="bg-[#FDFCFB] rounded-[2.5rem] border border-dashed border-stone-200 flex flex-col items-center justify-center p-10 hover:border-primary/50 transition-all group">
-                       <div className="w-16 h-16 rounded-full bg-white flex items-center justify-center mb-4 shadow-soft group-hover:scale-110 transition-transform">
-                          <Plus className="w-6 h-6 text-primary/20" />
+                    <button className="bg-[#F7F4EF] rounded-3xl border border-dashed border-stone-300 flex flex-col items-center justify-center p-8 hover:border-[#1B4332]/50 transition-all group">
+                       <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-3 shadow-sm group-hover:scale-110 transition-transform">
+                          <Plus className="w-5 h-5 text-stone-400" />
                        </div>
-                       <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40 group-hover:text-primary transition-colors">Add New Address</span>
+                       <span className="text-[10px] font-black uppercase tracking-widest text-stone-500 group-hover:text-[#1B4332] transition-colors">Add New Address</span>
                     </button>
                  </motion.div>
               )}
@@ -406,13 +381,15 @@ function ProfileContent() {
               {activeTab === 'wishlist' && (
                  <motion.div 
                     key="wishlist"
-                    className="py-12 px-6 bg-white rounded-[3rem] border border-stone-100 text-center"
+                    className="py-16 px-6 bg-white rounded-3xl border border-stone-100 text-center shadow-sm"
                  >
-                    <Heart className="w-16 h-16 text-primary/10 mx-auto mb-8" />
-                    <h3 className="text-2xl font-playfair font-black text-primary mb-4">Saved Discoveries</h3>
-                    <p className="text-gray-400 font-bold mb-10 max-w-xs mx-auto">Your favorite organic picks are waiting for you in your curated wishlist.</p>
-                    <Link href="/wishlist" className="px-10 py-5 bg-primary text-white rounded-full font-black text-[10px] uppercase tracking-[0.3em] shadow-premium active:scale-95 transition-all">
-                       Vew My Wishlist
+                    <div className="w-16 h-16 rounded-full bg-[#F7F4EF] flex items-center justify-center mx-auto mb-6">
+                       <Heart className="w-6 h-6 text-stone-300" />
+                    </div>
+                    <h3 className="text-2xl font-playfair font-bold text-[#1B4332] mb-3">Saved Discoveries</h3>
+                    <p className="text-stone-500 mb-8 max-w-xs mx-auto text-sm">Your favorite organic picks are waiting for you in your curated wishlist.</p>
+                    <Link href="/wishlist" className="inline-block px-8 py-3 bg-[#1B4332] text-white rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-[#1B4332]/90 active:scale-95 transition-all">
+                       View My Wishlist
                     </Link>
                  </motion.div>
               )}

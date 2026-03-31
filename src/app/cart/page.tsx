@@ -132,15 +132,15 @@ export default function CartPage() {
 
   if (cartItems.length === 0 && !success) {
     return (
-      <div className="min-h-[80vh] flex flex-col items-center justify-center p-12 bg-white">
-        <div className="w-24 h-24 rounded-full bg-stone-50 flex items-center justify-center mb-8 border border-black/5 shadow-premium">
-           <ShoppingCart className="w-10 h-10 text-primary/20" />
+      <div className="min-h-[80vh] flex flex-col items-center justify-center p-12 bg-[#F7F4EF]">
+        <div className="w-20 h-20 rounded-full bg-white flex items-center justify-center mb-6 shadow-sm border border-stone-100">
+           <ShoppingCart className="w-8 h-8 text-stone-300" />
         </div>
-        <h2 className="text-4xl font-playfair font-black text-primary mb-4">Your basket is empty</h2>
-        <p className="text-gray-400 mb-12 max-w-sm text-center font-bold">Looks like you haven&apos;t added any premium harvests yet.</p>
+        <h2 className="text-3xl font-playfair font-bold text-[#1B4332] mb-3">Your basket is empty</h2>
+        <p className="text-stone-500 mb-8 max-w-sm text-center text-sm">Looks like you haven&apos;t added any products yet.</p>
         <Link href="/products">
-          <button className="bg-primary text-white px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-premium hover:scale-105 active:scale-95 transition-all">
-            Browse Collections
+          <button className="bg-[#1B4332] text-white px-8 py-3.5 rounded-full font-black text-xs uppercase tracking-widest hover:bg-[#1B4332]/90 active:scale-95 transition-all">
+            Browse Products
           </button>
         </Link>
       </div>
@@ -149,24 +149,24 @@ export default function CartPage() {
 
   if (success) {
     return (
-      <div className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center bg-white">
+      <div className="min-h-[85vh] flex flex-col items-center justify-center px-6 text-center bg-[#F7F4EF]">
         <motion.div 
            initial={{ scale: 0 }}
            animate={{ scale: 1 }}
-           className="w-24 h-24 bg-green-50 rounded-full flex items-center justify-center mb-8 shadow-premium"
+           className="w-20 h-20 bg-green-50 rounded-full flex items-center justify-center mb-6 shadow-sm"
         >
-          <CheckCircle2 className="w-12 h-12 text-primary" />
+          <CheckCircle2 className="w-10 h-10 text-green-600" />
         </motion.div>
-        <h2 className="text-5xl font-playfair font-black text-primary mb-6 italic">Order Confirmed!</h2>
-        <p className="text-xl text-gray-500 mb-10 font-bold max-w-md">Your organic essentials are being carefully packed for harvest-fresh delivery.</p>
+        <h2 className="text-4xl font-playfair font-bold text-[#1B4332] mb-4">Order Confirmed!</h2>
+        <p className="text-stone-500 mb-8 text-sm max-w-md">Your organic essentials are being carefully packed for delivery.</p>
         
-        <div className="bg-stone-50 p-8 rounded-[2.5rem] mb-12 max-w-md w-full border border-black/5 shadow-soft">
-           <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest mb-3">Shipment Identifier</p>
-           <p className="font-black text-primary text-sm break-all">{success.split(': ')[1]}</p>
+        <div className="bg-white p-6 rounded-2xl mb-10 max-w-md w-full border border-stone-100 shadow-sm">
+           <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-2">Order ID</p>
+           <p className="font-bold text-[#1B4332] text-sm break-all">{success.split(': ')[1]}</p>
         </div>
         
         <Link href="/products">
-          <button className="bg-primary hover:bg-primary-hover text-white px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.3em] transition-all shadow-premium active:scale-95">
+          <button className="bg-[#1B4332] hover:bg-[#1B4332]/90 text-white px-10 py-3.5 rounded-full font-black text-xs uppercase tracking-widest transition-all active:scale-95">
             Continue Shopping
           </button>
         </Link>
@@ -175,34 +175,34 @@ export default function CartPage() {
   }
 
   return (
-    <div className="bg-stone-50/50 min-h-screen pb-32">
+    <div className="bg-[#F7F4EF] min-h-screen pb-32 pt-20">
       {/* Checkout Navbar Lookalike for trust */}
-      <div className="bg-white border-b border-stone-100 py-6 mb-12">
-         <div className="max-w-7xl mx-auto px-6 flex items-center justify-between">
-            <h1 className="text-2xl font-playfair font-black text-primary italic">Premium Checkout</h1>
-            <div className="flex items-center space-x-4">
-               <ShieldCheck className="w-5 h-5 text-primary" />
-               <span className="text-[10px] font-black uppercase tracking-widest text-primary/60">Secure SSL Encryption</span>
+      <div className="bg-transparent py-4 mb-4">
+         <div className="max-w-screen-lg mx-auto px-4 flex items-center justify-between">
+            <h1 className="text-3xl font-playfair font-bold text-[#1B4332]">Checkout</h1>
+            <div className="flex items-center space-x-2">
+               <ShieldCheck className="w-4 h-4 text-[#1B4332]" />
+               <span className="text-[9px] font-black uppercase tracking-widest text-[#1B4332]/60 hidden sm:inline-block">Secure Checkout</span>
             </div>
          </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+      <div className="max-w-screen-lg mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
           
           {/* Main Checkout Flow */}
-          <div className="lg:col-span-8 space-y-8">
+          <div className="md:col-span-8 space-y-6">
             
             {/* STEP 1: SUMMARY */}
-            <motion.div layout className="bg-white rounded-[2.5rem] shadow-premium border border-black/5 overflow-hidden">
+            <motion.div layout className="bg-white rounded-3xl border border-stone-100 shadow-sm overflow-hidden">
                <div 
                  onClick={() => currentStep > 1 && setCurrentStep(1)}
-                 className={`p-8 flex items-center cursor-pointer transition-colors ${currentStep === 1 ? 'bg-primary text-white' : 'hover:bg-stone-50'}`}
+                 className={`p-6 flex items-center cursor-pointer transition-colors ${currentStep === 1 ? 'bg-stone-50/50' : 'hover:bg-stone-50'}`}
                >
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black mr-6 transition-colors ${currentStep === 1 ? 'bg-white text-primary' : 'bg-stone-100 text-primary/40'}`}>01</span>
-                  <h3 className="font-black uppercase tracking-[0.2em] text-[11px]">Harvest Summary</h3>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black mr-4 transition-colors ${currentStep === 1 ? 'bg-[#1B4332] text-white' : 'bg-stone-100 text-stone-400'}`}>1</span>
+                  <h3 className="font-bold text-sm text-[#1B4332]">Order Summary</h3>
                   {currentStep > 1 && (
-                     <div className="ml-auto bg-primary text-white p-1 rounded-full"><CheckCircle2 className="w-4 h-4" /></div>
+                     <div className="ml-auto text-[#1B4332]"><CheckCircle2 className="w-5 h-5" /></div>
                   )}
                </div>
 
@@ -212,36 +212,36 @@ export default function CartPage() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="p-8 space-y-6 overflow-hidden"
+                        className="px-6 pb-6 space-y-4 overflow-hidden"
                      >
                         {cartItems.map((item: CartItem) => (
-                           <div key={item.id} className="flex items-start py-6 border-b border-stone-50 last:border-0 group">
-                              <div className="w-24 h-28 relative rounded-3xl overflow-hidden flex-shrink-0 bg-stone-50 border border-black/5 shadow-soft">
-                                 <Image src={item.image_url || '/placeholder.svg'} alt={item.name} fill className="object-cover group-hover:scale-110 transition-transform duration-700" unoptimized={!!item.image_url} />
+                           <div key={item.id} className="flex items-center py-4 border-b border-stone-100 last:border-0">
+                              <div className="w-20 h-20 relative rounded-xl overflow-hidden flex-shrink-0 bg-[#F7F4EF] border border-stone-100 p-2">
+                                 <Image src={item.image_url || '/placeholder.svg'} alt={item.name} fill className="object-contain" unoptimized={!!item.image_url} />
                               </div>
-                              <div className="ml-8 flex-1">
-                                 <div className="flex justify-between items-start mb-2">
-                                    <h4 className="font-black text-primary text-lg leading-tight uppercase tracking-tight">{item.name}</h4>
-                                    <span className="font-black text-xl text-primary">₹{(item.discountPrice || item.price) * item.qty}</span>
+                              <div className="ml-4 flex-1">
+                                 <div className="flex justify-between items-start mb-1">
+                                    <h4 className="font-bold text-[#1B4332] text-sm">{item.name}</h4>
                                  </div>
-                                 <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-6">{item.weight}</p>
-                                 
-                                 <div className="flex items-center justify-between">
-                                    <div className="flex items-center bg-stone-50 rounded-2xl p-1 border border-black/5">
-                                       <button onClick={() => updateQuantity(item.id, item.qty - 1)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-primary transition-colors text-lg font-black">—</button>
-                                       <span className="w-10 text-center text-sm font-black text-primary">{item.qty}</span>
-                                       <button onClick={() => updateQuantity(item.id, item.qty + 1)} className="w-10 h-10 flex items-center justify-center text-gray-400 hover:text-primary transition-colors text-lg font-black">+</button>
-                                    </div>
-                                    <button onClick={() => removeFromCart(item.id)} className="text-[10px] font-black text-red-400 hover:text-red-500 uppercase tracking-[0.2em] transition-colors flex items-center group">
-                                       Remove <Trash2 className="w-3.5 h-3.5 ml-2 group-hover:scale-110 transition-transform" />
-                                    </button>
+                                 <div className="flex justify-between items-center mt-2">
+                                     <span className="font-bold text-[#1B4332]">₹{(item.discountPrice || item.price) * item.qty}</span>
+                                     <div className="flex items-center">
+                                       <div className="flex items-center bg-white rounded-full border border-stone-200 shadow-sm px-1 py-0.5">
+                                          <button onClick={() => updateQuantity(item.id, item.qty - 1)} className="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-[#1B4332] transition-colors font-bold">—</button>
+                                          <span className="w-6 text-center text-xs font-bold text-[#1B4332]">{item.qty}</span>
+                                          <button onClick={() => updateQuantity(item.id, item.qty + 1)} className="w-7 h-7 flex items-center justify-center text-stone-400 hover:text-[#1B4332] transition-colors font-bold">+</button>
+                                       </div>
+                                       <button onClick={() => removeFromCart(item.id)} className="ml-4 text-stone-400 hover:text-red-500 transition-colors">
+                                          <Trash2 className="w-4 h-4" />
+                                       </button>
+                                     </div>
                                  </div>
                               </div>
                            </div>
                         ))}
-                        <div className="flex justify-end pt-8">
-                           <button onClick={() => setCurrentStep(2)} className="bg-accent text-white px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-premium hover:shadow-[#BC6C25]/30 group transition-all active:scale-95">
-                              Deliver To Address <ArrowRight className="w-4 h-4 ml-4 group-hover:translate-x-2 transition-transform duration-500" />
+                        <div className="flex justify-end pt-4">
+                           <button onClick={() => setCurrentStep(2)} className="bg-[#1B4332] text-white px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-[#1B4332]/90 transition-all active:scale-95 flex items-center">
+                              Continue to Address <ArrowRight className="w-3 h-3 ml-2" />
                            </button>
                         </div>
                      </motion.div>
@@ -250,14 +250,14 @@ export default function CartPage() {
             </motion.div>
 
             {/* STEP 2: ADDRESS */}
-            <motion.div layout className="bg-white rounded-[2.5rem] shadow-premium border border-black/5 overflow-hidden">
+            <motion.div layout className="bg-white rounded-3xl border border-stone-100 shadow-sm overflow-hidden">
                <div 
                  onClick={() => currentStep > 2 && setCurrentStep(2)}
-                 className={`p-8 flex items-center cursor-pointer transition-colors ${currentStep === 2 ? 'bg-primary text-white' : 'hover:bg-stone-50'}`}
+                 className={`p-6 flex items-center cursor-pointer transition-colors ${currentStep === 2 ? 'bg-stone-50/50' : 'hover:bg-stone-50'}`}
                >
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black mr-6 transition-colors ${currentStep === 2 ? 'bg-white text-primary' : 'bg-stone-100 text-primary/40'}`}>02</span>
-                  <h3 className="font-black uppercase tracking-[0.2em] text-[11px]">Dispatch Details</h3>
-                  {currentStep > 2 && <div className="ml-auto bg-primary text-white p-1 rounded-full"><CheckCircle2 className="w-4 h-4" /></div>}
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black mr-4 transition-colors ${currentStep === 2 ? 'bg-[#1B4332] text-white' : 'bg-stone-100 text-stone-400'}`}>2</span>
+                  <h3 className="font-bold text-sm text-[#1B4332]">Shipping Address</h3>
+                  {currentStep > 2 && <div className="ml-auto text-[#1B4332]"><CheckCircle2 className="w-5 h-5" /></div>}
                </div>
 
                <AnimatePresence>
@@ -266,29 +266,26 @@ export default function CartPage() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: 'auto', opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        className="p-8 space-y-8 overflow-hidden"
+                        className="px-6 pb-6 space-y-6 overflow-hidden"
                      >
                          {userData?.lastAddress && (
-                           <div className="mb-6 p-8 bg-stone-50 border border-primary/10 rounded-[2.5rem] relative overflow-hidden group">
-                              <div className="flex items-start gap-6">
-                                 <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mt-1 transition-all ${useSavedAddress ? 'border-primary bg-primary' : 'border-stone-200'}`}>
-                                    {useSavedAddress && <div className="w-2.5 h-2.5 rounded-full bg-white scale-up" />}
+                           <div className="mb-4 p-5 bg-[#F7F4EF]/50 border border-stone-200 rounded-2xl relative overflow-hidden group cursor-pointer" onClick={() => setUseSavedAddress(true)}>
+                              <div className="flex items-start gap-4">
+                                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mt-0.5 transition-all ${useSavedAddress ? 'border-[#1B4332] bg-[#1B4332]' : 'border-stone-300'}`}>
+                                    {useSavedAddress && <div className="w-2 h-2 rounded-full bg-white" />}
                                  </div>
-                                 <div className="flex-1" onClick={() => setUseSavedAddress(true)}>
-                                    <div className="flex items-center justify-between mb-4">
-                                       <p className="text-[10px] font-black text-primary/40 uppercase tracking-[0.3em]">Selected Destination</p>
+                                 <div className="flex-1">
+                                    <div className="flex items-center justify-between mb-2">
+                                       <p className="text-[10px] font-black text-stone-500 uppercase tracking-widest">Saved Address</p>
                                        <button 
                                          onClick={(e) => { e.stopPropagation(); setUseSavedAddress(false); }} 
-                                         className="text-[10px] font-black text-secondary hover:text-secondary/70 uppercase tracking-widest underline decoration-2 underline-offset-4"
+                                         className="text-[10px] font-black text-[#DC6827] hover:text-[#DC6827]/80 uppercase tracking-wider"
                                        >
-                                          Change Address
+                                          Enter New
                                        </button>
                                     </div>
-                                    <p className="text-sm font-black text-primary leading-relaxed uppercase tracking-tight line-clamp-3">{userData.lastAddress}</p>
+                                    <p className="text-xs font-medium text-[#1B4332] leading-relaxed line-clamp-3">{userData.lastAddress}</p>
                                  </div>
-                              </div>
-                              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-20 transition-opacity">
-                                 <MapPin className="w-12 h-12 text-primary" />
                               </div>
                            </div>
                          )}
@@ -299,45 +296,45 @@ export default function CartPage() {
                                initial={{ opacity: 0, height: 0 }}
                                animate={{ opacity: 1, height: 'auto' }}
                                exit={{ opacity: 0, height: 0 }}
-                               className="grid grid-cols-1 md:grid-cols-2 gap-8 overflow-hidden"
+                               className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-hidden"
                              >
                                {[
-                                  { label: 'Recipient Name', name: 'name', type: 'text' },
-                                  { label: 'Phone Number', name: 'phone', type: 'text' },
+                                  { label: 'Full Name', name: 'name', type: 'text' },
+                                  { label: 'Phone', name: 'phone', type: 'text' },
                                   { label: 'Pincode', name: 'pincode', type: 'text' },
-                                  { label: 'Locality / Area', name: 'locality', type: 'text' },
+                                  { label: 'Locality', name: 'locality', type: 'text' },
                                   { label: 'City', name: 'city', type: 'text' },
                                   { label: 'State', name: 'state', type: 'text' }
                                ].map((field) => (
-                                  <div key={field.name} className="space-y-3">
-                                     <label className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">{field.label}</label>
+                                  <div key={field.name} className="space-y-1.5">
+                                     <label className="text-[10px] font-black text-stone-500 uppercase tracking-wider pl-1">{field.label}</label>
                                      <input 
                                         name={field.name} 
                                         value={(address as any)[field.name]} 
                                         onChange={handleInputChange} 
-                                        className="w-full bg-stone-50 border border-black/5 rounded-2xl px-6 py-4 text-sm font-bold text-primary focus:bg-white focus:border-primary/20 outline-none transition-all" 
+                                        className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm focus:border-[#1B4332] outline-none transition-all" 
                                      />
                                   </div>
                                ))}
-                               <div className="md:col-span-2 space-y-3">
-                                  <label className="text-[10px] font-black text-primary/40 uppercase tracking-[0.2em] ml-2">Complete Shipping Address</label>
+                               <div className="sm:col-span-2 space-y-1.5">
+                                  <label className="text-[10px] font-black text-stone-500 uppercase tracking-wider pl-1">Complete Address</label>
                                    <textarea 
                                      name="fullAddress" 
                                      value={address.fullAddress} 
                                      onChange={handleInputChange} 
-                                     className="w-full bg-stone-50 border border-black/5 rounded-[2rem] px-6 py-5 text-sm font-bold text-primary focus:bg-white focus:border-primary/20 outline-none transition-all min-h-[120px]" 
+                                     className="w-full bg-white border border-stone-200 rounded-xl px-4 py-3 text-sm focus:border-[#1B4332] outline-none transition-all min-h-[80px]" 
                                    />
                                </div>
                              </motion.div>
                            )}
                          </AnimatePresence>
-                        <div className="pt-8 flex justify-end">
+                        <div className="pt-4 flex justify-end">
                            <button 
                              disabled={!address.name || !address.phone || !address.pincode}
                              onClick={() => setCurrentStep(3)} 
-                             className="bg-accent text-white px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-premium disabled:opacity-40 transition-all active:scale-95"
+                             className="bg-[#1B4332] text-white px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest disabled:opacity-40 transition-all active:scale-95"
                            >
-                             Verify & Save Address
+                             Save & Continue
                            </button>
                         </div>
                      </motion.div>
@@ -345,44 +342,45 @@ export default function CartPage() {
                </AnimatePresence>
             </motion.div>
 
+
             {/* STEP 3: PAYMENT */}
-            <motion.div layout className="bg-white rounded-[2.5rem] shadow-premium border border-black/5 overflow-hidden">
-               <div className={`p-8 flex items-center ${currentStep === 3 ? 'bg-primary text-white' : 'bg-gray-50/50'}`}>
-                  <span className={`w-8 h-8 rounded-full flex items-center justify-center text-xs font-black mr-6 ${currentStep === 3 ? 'bg-white text-primary' : 'bg-stone-100 text-primary/40'}`}>03</span>
-                  <h3 className="font-black uppercase tracking-[0.2em] text-[11px]">Settlement Panel</h3>
+            <motion.div layout className="bg-white rounded-3xl border border-stone-100 shadow-sm overflow-hidden">
+               <div className={`p-6 flex items-center ${currentStep === 3 ? 'bg-stone-50/50' : 'bg-white'}`}>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-[10px] font-black mr-4 ${currentStep === 3 ? 'bg-[#1B4332] text-white' : 'bg-stone-100 text-stone-400'}`}>3</span>
+                  <h3 className="font-bold text-sm text-[#1B4332]">Payment Method</h3>
                </div>
 
                {currentStep === 3 && (
                   <div className="p-0">
                      {[
-                        { id: 'Online', title: 'Digital Payment', desc: 'Secure encryption via Razorpay Hub', icon: ShieldCheck },
-                        { id: 'COD', title: 'Cash on Delivery', desc: 'Settle at your doorstep upon arrival', icon: Truck }
+                        { id: 'Online', title: 'Card / UPI / NetBanking', desc: 'Secure payment gateway', icon: CreditCard },
+                        { id: 'COD', title: 'Cash on Delivery', desc: 'Pay when your order arrives', icon: Truck }
                      ].map((mode) => (
                         <div 
                           key={mode.id}
                           onClick={() => setPaymentMode(mode.id)}
-                          className={`p-10 border-b border-stone-50 cursor-pointer transition-all duration-500 ${paymentMode === mode.id ? 'bg-stone-50' : 'hover:bg-stone-50/20'}`}
+                          className={`p-6 border-b border-stone-100 cursor-pointer transition-all duration-300 ${paymentMode === mode.id ? 'bg-[#F7F4EF]/30' : 'hover:bg-stone-50'}`}
                         >
                            <div className="flex items-start">
-                              <div className={`w-6 h-6 rounded-full border-2 flex items-center justify-center mr-8 mt-1 transition-all ${paymentMode === mode.id ? 'border-primary bg-primary' : 'border-stone-200'}`}>
-                                 {paymentMode === mode.id && <div className="w-2.5 h-2.5 rounded-full bg-white scale-up" />}
+                              <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center mr-4 mt-0.5 transition-all ${paymentMode === mode.id ? 'border-[#1B4332] bg-[#1B4332]' : 'border-stone-300'}`}>
+                                 {paymentMode === mode.id && <div className="w-2 h-2 rounded-full bg-white" />}
                               </div>
                               <div className="flex-1">
-                                 <h4 className="font-black text-lg text-primary uppercase tracking-tight mb-2">{mode.title}</h4>
-                                 <p className="text-sm font-bold text-gray-400 mb-8">{mode.desc}</p>
+                                 <h4 className="font-bold text-sm text-[#1B4332] mb-1">{mode.title}</h4>
+                                 <p className="text-xs text-stone-500 mb-4">{mode.desc}</p>
                                  {paymentMode === mode.id && (
                                     <motion.button 
-                                      initial={{ opacity: 0, x: -10 }}
+                                      initial={{ opacity: 0, x: -5 }}
                                       animate={{ opacity: 1, x: 0 }}
                                       onClick={onFinalOrder}
                                       disabled={loading}
-                                      className="bg-accent text-white px-12 py-5 rounded-full font-black text-xs uppercase tracking-[0.3em] shadow-premium hover:shadow-[#BC6C25]/30 group transition-all"
+                                      className="bg-[#1B4332] text-white px-8 py-3 rounded-full font-black text-[10px] uppercase tracking-widest hover:bg-[#1B4332]/90 flex items-center transition-all active:scale-95"
                                     >
-                                      {loading ? <Loader2 className="w-5 h-5 animate-spin mx-auto" /> : <>Complete Order <ArrowRight className="w-4 h-4 ml-4 group-hover:translate-x-2 transition-transform duration-500" /></>}
+                                      {loading ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : <>Pay & Place Order <ArrowRight className="w-3 h-3 ml-2" /></>}
                                     </motion.button>
                                  )}
                               </div>
-                              <mode.icon className={`w-12 h-12 transition-colors ${paymentMode === mode.id ? 'text-primary/20' : 'text-stone-100'}`} />
+                              <mode.icon className={`w-6 h-6 ${paymentMode === mode.id ? 'text-[#1B4332]' : 'text-stone-300'}`} />
                            </div>
                         </div>
                      ))}
@@ -390,44 +388,34 @@ export default function CartPage() {
                )}
             </motion.div>
             
-            {error && <div className="flex items-center p-6 bg-red-50 text-red-600 rounded-[2rem] border border-red-100 text-sm font-bold"><ShieldAlert className="w-5 h-5 mr-3" /> {error}</div>}
+            {error && <div className="flex items-center p-4 bg-red-50 text-red-600 rounded-2xl border border-red-100 text-sm font-bold"><ShieldAlert className="w-4 h-4 mr-2" /> {error}</div>}
           </div>
 
           {/* Sidebar Summary */}
-          <div className="lg:col-span-4 lg:sticky lg:top-32">
-             <div className="bg-white rounded-[2.5rem] shadow-premium border border-black/5 overflow-hidden">
-                <div className="p-8 border-b border-stone-50">
-                   <h3 className="font-black text-[10px] text-primary/40 uppercase tracking-[0.3em]">Harvest Valuation</h3>
+          <div className="md:col-span-4 md:sticky md:top-24">
+             <div className="bg-white rounded-3xl border border-stone-100 shadow-sm overflow-hidden">
+                <div className="p-6 border-b border-stone-100 bg-stone-50/50">
+                   <h3 className="font-bold text-sm text-[#1B4332]">Order Summary</h3>
                 </div>
-                <div className="p-10 space-y-6">
-                   <div className="flex justify-between text-sm font-bold text-gray-500">
+                <div className="p-6 space-y-4">
+                   <div className="flex justify-between text-sm text-stone-600">
                       <span>Subtotal ({cartItems.length} items)</span>
-                      <span className="text-primary font-black uppercase">₹{getCartTotal()}</span>
+                      <span className="font-bold text-[#1B4332]">₹{getCartTotal()}</span>
                    </div>
-                   <div className="flex justify-between text-sm font-bold text-gray-500">
-                      <span>Promotional Access</span>
-                      <span className="text-secondary font-black uppercase">− ₹0</span>
+                   <div className="flex justify-between text-sm text-stone-600 pb-4 border-b border-stone-100">
+                      <span>Shipping</span>
+                      <span className="font-bold text-[#DC6827]">Free</span>
                    </div>
-                   <div className="flex justify-between text-sm font-bold text-gray-500 pb-6 border-b border-dashed border-stone-200">
-                      <span>Harvest Transport</span>
-                      <span className="text-secondary font-black uppercase tracking-widest">Complimentary</span>
-                   </div>
-                   <div className="flex justify-between items-end pt-4">
+                   <div className="flex justify-between items-end pt-2">
                       <div>
-                         <p className="text-[10px] font-black text-primary/40 uppercase tracking-widest mb-1">Estimated Total</p>
-                         <p className="text-3xl font-black text-primary">₹{getCartTotal()}</p>
+                         <p className="text-[10px] font-black text-stone-400 uppercase tracking-widest mb-1">Total</p>
+                         <p className="text-2xl font-black text-[#1B4332]">₹{getCartTotal()}</p>
                       </div>
-                      <ShieldCheck className="w-8 h-8 text-primary shadow-soft p-1 rounded-full" />
                    </div>
                 </div>
-                <div className="p-8 bg-primary/5 text-primary text-[10px] font-black uppercase tracking-[0.2em] text-center border-t border-black/5">
-                   You are supporting local Indian farms
+                <div className="p-4 bg-[#F7F4EF]/50 text-stone-500 text-[10px] font-black uppercase tracking-widest text-center border-t border-stone-100">
+                   100% Organic Certified
                 </div>
-             </div>
-             
-             <div className="mt-10 px-8 flex flex-wrap gap-4 justify-center">
-                <div className="flex items-center text-[9px] font-black text-primary/30 uppercase tracking-widest"><ShieldCheck className="w-3 h-3 mr-2" /> 100% Genuine</div>
-                <div className="flex items-center text-[9px] font-black text-primary/30 uppercase tracking-widest"><Truck className="w-3 h-3 mr-2" /> Express Dispatch</div>
              </div>
           </div>
 

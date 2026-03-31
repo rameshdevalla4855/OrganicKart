@@ -13,6 +13,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const SearchOverlay = dynamic(() => import('./SearchOverlay'), { ssr: false });
+const Logo = dynamic(() => import('./Logo'), { ssr: false });
 
 interface CartItem { id: string; qty: number; }
 
@@ -67,13 +68,7 @@ export default function Navbar() {
               </button>
             )}
             {/* Logo */}
-            <Link href="/" className="flex items-center gap-1.5">
-              <span className="w-7 h-7 bg-[#1B4332] rounded-full flex items-center justify-center text-white text-xs font-black">🌿</span>
-              <div className="flex flex-col leading-none">
-                <span className="font-playfair font-bold text-[#1B4332] text-base leading-none italic">Shresta</span>
-                <span className="text-[7px] font-black uppercase tracking-[0.2em] text-[#1B4332]/60 leading-none">Organics</span>
-              </div>
-            </Link>
+            <Logo variant="navbar" />
           </div>
 
           {/* Right icons */}
@@ -133,13 +128,7 @@ export default function Navbar() {
             >
               {/* Close + Logo */}
               <div className="flex items-center justify-between px-6 pt-8 pb-6">
-                <div className="flex items-center gap-2">
-                  <span className="w-8 h-8 bg-white/10 rounded-full flex items-center justify-center text-white text-sm">🌿</span>
-                  <div>
-                    <p className="font-playfair font-bold text-white italic text-lg leading-none">Shresta</p>
-                    <p className="text-[8px] text-white/50 uppercase tracking-widest font-black">Organics</p>
-                  </div>
-                </div>
+                <Logo variant="footer" className="scale-75 origin-left" />
                 <button onClick={() => setIsMenuOpen(false)} className="p-2 text-white/60 hover:text-white">
                   <X className="w-5 h-5" />
                 </button>

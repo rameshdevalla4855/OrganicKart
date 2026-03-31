@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { FaInstagram, FaFacebookF, FaTwitter, FaYoutube, FaLeaf, FaArrowRight } from 'react-icons/fa';
+import Logo from './Logo';
 
 export default function Footer() {
   const currentYear = new Date().getFullYear();
@@ -17,14 +18,7 @@ export default function Footer() {
           
           {/* Brand Hub */}
           <div className="lg:col-span-5 space-y-10">
-            <Link href="/" className="inline-block group">
-               <div className="flex flex-col">
-                  <span className="text-4xl font-playfair font-black tracking-tight italic">
-                    Shresta<span className="text-secondary italic">Organics</span>
-                  </span>
-                  <span className="text-[10px] font-black text-white/40 uppercase tracking-[0.4em] mt-2">Pure Food • Pure Life</span>
-               </div>
-            </Link>
+            <Logo variant="footer" />
             <p className="text-white/50 text-[13px] font-black uppercase tracking-widest leading-[1.8] max-w-sm">
               We provide traditional, unadulterated food products sourced directly from Indian farms. Heritage quality for modern living.
             </p>
