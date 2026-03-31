@@ -27,7 +27,7 @@ const formatProductName = (name: string) => {
   return formatted;
 };
 
-const categories = ['All', 'Rice', 'Spices', 'Oils', 'Ghees', 'Pulses', 'Beverages', 'Medicine & Healthcare', 'Sweeteners', 'Pickles'];
+const categories = ['All', 'Oils', 'Grains', 'Spices', 'Honey', 'Ghees', 'Millets', 'Seeds', 'Pulses'];
 
 function ProductsContent() {
   const { user, loading: authLoading } = useAuth();
@@ -81,7 +81,7 @@ function ProductsContent() {
   );
 
   return (
-    <div className="bg-[#FCFBFA] min-h-screen">
+    <div className="bg-[#F7F4EF] min-h-screen">
       {/* Premium Navigation Header */}
       <div className="bg-white border-b border-stone-100 transition-all duration-500">
         <div className="max-w-7xl mx-auto pt-8 pb-2">
@@ -215,21 +215,56 @@ function ProductsContent() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-12 py-24">
-        {/* REFINED HEADER & COUNT */}
-        <div className="flex flex-col md:flex-row justify-between items-center mb-16 gap-6">
-           <div className="text-center md:text-left">
-              <h2 className="text-4xl md:text-6xl font-playfair font-black text-primary leading-tight lowercase first-letter:uppercase italic">
-                 {activeCategory === 'All' ? 'Our Collections' : activeCategory}
-              </h2>
-              <div className="w-12 h-1 bg-secondary mx-auto md:ml-0 mt-4 rounded-full opacity-30" />
-           </div>
-           
-           <div className="flex items-center space-x-2 text-[10px] font-black uppercase tracking-[0.3em] text-stone-300">
-              <LayoutGrid className="w-4 h-4" />
-              <span>{filteredProducts.length} Premium Picks</span>
-           </div>
+      <div className="max-w-screen-lg mx-auto px-4 py-6">
+        {/* Search & Sort */}
+        <div className="flex items-center gap-3 mb-5">
+          <div className="relative flex-grow">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-300" />
+            <input
+              type="text"
+              value={localSearch}
+              onChange={(e) => setLocalSearch(e.target.value)}
+              placeholder="Search products..."
+              className="w-full pl-9 pr-4 py-2.5 bg-white border border-stone-200 rounded-full text-sm outline-none focus:border-[#1B4332] transition-colors"
+            />
+          </div>
+          <div className="relative">
+            <button
+              onClick={() => setIsSortOpen(!isSortOpen)}
+              className="flex items-center gap-1.5 px-4 py-2.5 bg-white border border-stone-200 rounded-full text-[10px] font-black uppercase tracking-wider text-stone-500 whitespace-nowrap"
+            >
+              Sort <ChevronDown className={`w-3.5 h-3.5 transition-transform ${isSortOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <AnimatePresence>
+              {isSortOpen && (
+                <motion.div
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 8 }}
+                  className="absolute right-0 top-full mt-2 w-48 bg-white rounded-2xl shadow-lg border border-stone-100 p-2 z-50"
+                >
+                  {[
+                    { val: 'newest', label: 'Latest Arrivals' },
+                    { val: 'price-low', label: 'Price: Low to High' },
+                    { val: 'price-high', label: 'Price: High to Low' },
+                  ].map((opt) => (
+                    <button
+                      key={opt.val}
+                      onClick={() => { setSortBy(opt.val); setIsSortOpen(false); }}
+                      className={`w-full text-left px-4 py-2.5 rounded-xl text-xs font-semibold transition-all ${
+                        sortBy === opt.val ? 'bg-[#1B4332] text-white' : 'hover:bg-stone-50 text-stone-600'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
+        {/* Result count */}
+        <p className="text-[10px] text-stone-400 font-black uppercase tracking-wider mb-4">{filteredProducts.length} products found</p>
 
         {/* Main Grid Content */}
         {filteredProducts.length === 0 ? (
@@ -247,15 +282,15 @@ function ProductsContent() {
               </button>
            </div>
          ) : (
-            <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 md:gap-12">
+            <div className="grid grid-cols-2 gap-4">
               {filteredProducts.map((p, i) => (
                  <motion.div
                     key={p.id}
-                    initial={{ opacity: 0, y: 30 }}
+                    initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: i * 0.05, duration: 0.8 }}
+                    transition={{ delay: i * 0.04, duration: 0.4 }}
                  >
-                    <ProductCard product={{...p, name: formatProductName(p.name)}} />
+                    <ProductCard product={p} />
                  </motion.div>
               ))}
            </div>

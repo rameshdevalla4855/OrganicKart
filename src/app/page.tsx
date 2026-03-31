@@ -4,46 +4,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseInit';
-import { Loader2 } from 'lucide-react';
-import { FaArrowRight, FaShieldAlt, FaLeaf, FaMagic, FaTruck } from 'react-icons/fa';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
+import { ArrowRight } from 'lucide-react';
 
 import dynamic from 'next/dynamic';
 
-// Premium Home Page Components - Dynamically imported for speed
-const Hero = dynamic(() => import("@/components/home/Hero"), { 
+const Hero = dynamic(() => import("@/components/home/Hero"), {
   ssr: true,
-  loading: () => <div className="h-[65vh] bg-stone-900 animate-pulse" /> 
+  loading: () => <div className="h-[45vh] bg-stone-200 animate-pulse" />
 });
 
-const CategoryMobile = () => {
-  const categories = [
-    { name: 'Oils', icon: '🫗', color: 'bg-amber-50' },
-    { name: 'Grains', icon: '🌾', color: 'bg-emerald-50' },
-    { name: 'Spices', icon: '🌶️', color: 'bg-red-50' },
-    { name: 'Seeds', icon: '🌻', color: 'bg-yellow-50' },
-    { name: 'Honey', icon: '🍯', color: 'bg-orange-50' },
-    { name: 'Millets', icon: '🌽', color: 'bg-stone-50' }
-  ];
-
-  return (
-    <div className="lg:hidden flex overflow-x-auto sb-hide px-6 py-6 space-x-6 bg-white border-b border-stone-50">
-      {categories.map((cat) => (
-        <Link key={cat.name} href={`/products?category=${cat.name}`} className="flex flex-col items-center flex-shrink-0">
-          <div className={`w-14 h-14 rounded-full ${cat.color} flex items-center justify-center text-xl shadow-sm border border-black/5`}>
-            {cat.icon}
-          </div>
-          <span className="mt-2 text-[10px] font-black uppercase tracking-widest text-primary/60">{cat.name}</span>
-        </Link>
-      ))}
-    </div>
-  );
-};
-
-const CollectionSlider = dynamic(() => import("@/components/home/CollectionSlider"), { 
-  ssr: true,
-  loading: () => <div className="h-96 bg-stone-50 animate-pulse" />
-});
 const FAQ = dynamic(() => import("@/components/home/FAQ"), { ssr: true });
 const ProductCard = dynamic(() => import("@/components/ProductCard"), { ssr: true });
 const ProductSkeleton = dynamic(() => import("@/components/ProductSkeleton"), { ssr: true });
@@ -56,17 +26,30 @@ interface Product {
   discountPrice?: number;
   image_url: string;
   weight: string;
+  isWoodPressed?: boolean;
 }
+
+const categories = [
+  { name: 'Oils',    icon: '🫗', color: 'bg-amber-50',   border: 'border-amber-100' },
+  { name: 'Grains',  icon: '🌾', color: 'bg-emerald-50', border: 'border-emerald-100' },
+  { name: 'Spices',  icon: '🌶️', color: 'bg-red-50',     border: 'border-red-100' },
+  { name: 'Seeds',   icon: '🌻', color: 'bg-yellow-50',  border: 'border-yellow-100' },
+  { name: 'Honey',   icon: '🍯', color: 'bg-orange-50',  border: 'border-orange-100' },
+  { name: 'Millets', icon: '🌽', color: 'bg-lime-50',    border: 'border-lime-100' },
+  { name: 'Ghees',   icon: '🧈', color: 'bg-amber-50',   border: 'border-amber-100' },
+  { name: 'Pulses',  icon: '🫘', color: 'bg-green-50',   border: 'border-green-100' },
+];
+
+const trustBadges = [
+  { icon: '🌿', title: '100% Organic',  desc: 'Pure certified harvests',  iconBg: 'bg-green-100' },
+  { icon: '🛡️', title: 'Lab Tested',    desc: 'Zero chemical residue',    iconBg: 'bg-blue-100' },
+  { icon: '✨', title: 'Cold Pressed',  desc: 'Nutrient-rich oils',       iconBg: 'bg-amber-100' },
+  { icon: '🚚', title: 'Eco Shipping',  desc: 'Direct farm to door',      iconBg: 'bg-green-100' },
+];
 
 export default function Home() {
   const [bestsellers, setBestsellers] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
-  const { scrollYProgress } = useScroll();
-  const scaleX = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
-    restDelta: 0.001
-  });
 
   useEffect(() => {
     const fetchBestsellers = async () => {
@@ -84,156 +67,146 @@ export default function Home() {
         setLoading(false);
       }
     };
-
     fetchBestsellers();
   }, []);
 
   return (
-    <div className="min-h-screen bg-background">
-      {/* Premium Progress Bar */}
-      <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-secondary origin-left z-[100]" 
-        style={{ scaleX }}
-      />
+    <div className="min-h-screen bg-[#F7F4EF]">
 
-      {/* Professional Mobile Categories - Positioned Top for High Density */}
-      <CategoryMobile />
-
-      {/* Hero Section */}
+      {/* ─── HERO ─── */}
       <Hero />
 
-      {/* Dynamic Collection Slider - Positioned under the banner */}
-      <div className="bg-white">
-        <CollectionSlider />
-      </div>
-
-      {/* Trust Builders / USP - High-Density Ribbon */}
-      <section className="py-12 relative overflow-hidden bg-white">
-        <div className="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 md:gap-12">
-            {[
-              { icon: FaLeaf, title: "100% Organic", desc: "Pure Harvests", color: "text-primary" },
-              { icon: FaShieldAlt, title: "Lab Tested", desc: "Certified Safety", color: "text-secondary" },
-              { icon: FaMagic, title: "Cold Pressed", desc: "Nutrient Rich", color: "text-primary" },
-              { icon: FaTruck, title: "Eco Shipping", desc: "Direct to Door", color: "text-secondary" }
-            ].map((usp, i) => (
-              <motion.div 
-                key={usp.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.8 }}
-                className="group flex flex-col items-center text-center p-6 md:p-12 rounded-[2rem] bg-stone-50 hover:bg-white transition-all duration-700 shadow-soft border border-stone-100"
-              >
-                <div className={`w-12 h-12 md:w-20 md:h-20 rounded-full bg-white flex items-center justify-center mb-4 md:mb-8 group-hover:bg-primary group-hover:scale-110 transition-all duration-700 shadow-sm`}>
-                   <usp.icon className={`w-6 h-6 md:w-8 md:h-8 ${usp.color}`} />
-                </div>
-                <h3 className="text-[10px] md:text-lg font-black text-primary mb-1 uppercase tracking-widest">{usp.title}</h3>
-                <p className="text-primary/40 text-[8px] md:text-[10px] font-black uppercase tracking-[0.2em]">{usp.desc}</p>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Featured Bestsellers - Botanical Theme */}
-      <section className="py-32 bg-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 md:px-12">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-24 gap-8">
-            <motion.div 
-              initial={{ opacity: 0, x: -50 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="w-full"
-            >
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-8 h-[1px] bg-primary" />
-                <span className="text-primary font-black tracking-[0.3em] uppercase text-[10px]">Top Rated Selections</span>
-              </div>
-              <h2 className="text-4xl md:text-4xl font-playfair font-black text-primary leading-tight mb-4 whitespace-nowrap">
-                Curated <span className="text-secondary italic">Bestsellers</span>
-              </h2>
-              <p className="text-primary/40 text-[13px] leading-relaxed font-black max-w-xl uppercase tracking-widest">
-                Discover the most loved products by our health-conscious community. Pure, fresh, and delivered with love.
-              </p>
-            </motion.div>
-            
-            <Link href="/products" className="group flex items-center space-x-4 bg-primary text-white px-10 py-5 rounded-full font-black text-xs uppercase tracking-[0.2em] shadow-glow hover:bg-primary-hover active:scale-95 transition-all">
-              <span>Explore All</span>
-              <FaArrowRight className="w-4 h-4 group-hover:translate-x-2 transition-transform duration-500" />
+      {/* ─── SHOP BY CATEGORY ─── */}
+      <section className="bg-[#F7F4EF] py-8 px-4">
+        <div className="max-w-screen-lg mx-auto">
+          {/* Header row */}
+          <div className="flex items-center justify-between mb-5">
+            <h2 className="text-xl font-bold text-stone-800">Shop by Category</h2>
+            <Link href="/products" className="text-sm font-black text-[#1B4332] flex items-center gap-1 hover:underline">
+              VIEW ALL <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
-        {loading ? (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
-            {[1, 2, 3, 4].map((i) => (
-              <ProductSkeleton key={i} />
+
+          {/* 2×4 pastel tile grid */}
+          <div className="grid grid-cols-4 gap-3">
+            {categories.map((cat) => (
+              <Link key={cat.name} href={`/products?category=${cat.name}`}>
+                <motion.div
+                  whileTap={{ scale: 0.94 }}
+                  className={`${cat.color} ${cat.border} border rounded-2xl flex flex-col items-center justify-center py-3 px-1 gap-1.5 cursor-pointer hover:shadow-sm transition-all`}
+                >
+                  <span className="text-2xl">{cat.icon}</span>
+                  <span className="text-[9px] font-black uppercase tracking-wider text-stone-600 text-center leading-none">{cat.name}</span>
+                </motion.div>
+              </Link>
             ))}
           </div>
-        ) : bestsellers.length === 0 ? (
-          <div className="bg-stone-50 p-20 rounded-[3rem] border border-stone-100 text-center">
-             <p className="text-primary/40 text-lg mb-6">No products found yet.</p>
-             <Link href="/admin/products" className="px-8 py-3 bg-primary text-white rounded-full font-bold">Add Your First Product →</Link>
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-10">
-            {bestsellers.map((product, i) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.1, duration: 0.8 }}
-              >
-                <ProductCard product={product} variant="compact" />
-              </motion.div>
-            ))}
-          </div>
-        )}
         </div>
       </section>
 
-      {/* FAQ Section with Premium Reveal */}
+      {/* ─── TRUST BADGES ─── */}
+      <section className="bg-white mx-4 my-4 rounded-2xl px-5 py-5 border border-stone-100">
+        <div className="max-w-screen-lg mx-auto grid grid-cols-2 gap-4">
+          {trustBadges.map((badge) => (
+            <div key={badge.title} className="flex items-start gap-3">
+              <div className={`${badge.iconBg} w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0 text-base`}>
+                {badge.icon}
+              </div>
+              <div>
+                <p className="text-[11px] font-black text-stone-800 uppercase tracking-wide leading-tight">{badge.title}</p>
+                <p className="text-[10px] text-stone-400 mt-0.5">{badge.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ─── CURATED BESTSELLERS ─── */}
+      <section className="bg-[#F7F4EF] py-8 px-4">
+        <div className="max-w-screen-lg mx-auto">
+          {/* Section label */}
+          <div className="flex flex-col items-center text-center mb-6">
+            <span className="bg-[#F0E8D8] text-stone-500 text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full mb-3">
+              TOP RATED
+            </span>
+            <h2 className="text-2xl font-playfair font-bold text-stone-900 mb-2">
+              Curated Bestsellers
+            </h2>
+            <p className="text-stone-400 text-[11px] max-w-xs leading-relaxed">
+              Discover the most loved products by our health-conscious community. Pure, fresh, and delivered with love.
+            </p>
+          </div>
+
+          {/* 2-column product grid */}
+          {loading ? (
+            <div className="grid grid-cols-2 gap-4">
+              {[1, 2, 3, 4].map((i) => <ProductSkeleton key={i} />)}
+            </div>
+          ) : bestsellers.length === 0 ? (
+            <div className="text-center py-12 text-stone-400">
+              <p className="mb-4">No products yet.</p>
+              <Link href="/admin/products" className="px-6 py-3 bg-[#1B4332] text-white rounded-full text-sm font-bold">
+                Add Products →
+              </Link>
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-4">
+              {bestsellers.map((product, i) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: i * 0.08, duration: 0.5 }}
+                >
+                  <ProductCard product={product} variant="compact" />
+                </motion.div>
+              ))}
+            </div>
+          )}
+
+          {/* Explore All button */}
+          <div className="flex justify-center mt-7">
+            <Link href="/products">
+              <motion.button
+                whileTap={{ scale: 0.96 }}
+                className="border-2 border-[#1B4332] text-[#1B4332] px-8 py-3 rounded-full text-xs font-black uppercase tracking-widest flex items-center gap-2 hover:bg-[#1B4332] hover:text-white transition-all"
+              >
+                EXPLORE ALL PRODUCTS <ArrowRight className="w-4 h-4" />
+              </motion.button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ─── FAQ ─── */}
       <FAQ />
 
-      {/* Senior Newsletter - Botanical Refresh */}
-      <section className="py-40 bg-white border-t border-stone-100 relative overflow-hidden">
-        {/* Soft botanical glowing shapes */}
-        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-primary opacity-[0.03] rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary opacity-[0.03] rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2" />
-        
-        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
-          <motion.div
-             initial={{ opacity: 0, y: 50, scale: 0.95 }}
-             whileInView={{ opacity: 1, y: 0, scale: 1 }}
-             viewport={{ once: true }}
-             transition={{ duration: 1 }}
-          >
-            <div className="inline-flex items-center space-x-3 mb-8 bg-stone-50 px-6 py-2 rounded-full border border-stone-100 shadow-sm">
-               <FaLeaf className="w-3 h-3 text-primary" />
-               <span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary/40">Community First</span>
-            </div>
-            <h2 className="text-2xl md:text-4xl font-playfair font-black text-primary mb-6 leading-tight whitespace-nowrap">
-              Start Your <span className="text-secondary italic">Organic</span> Journey
-            </h2>
-            <p className="text-primary/40 mb-16 text-xs md:text-sm max-w-xl mx-auto leading-relaxed font-black uppercase tracking-[0.2em]">
-              Join 10,000+ happy families receiving weekly health tips and exclusive first access to harvest releases.
-            </p>
-            
-            <form className="flex flex-col sm:flex-row gap-4 max-w-2xl mx-auto p-2 bg-white rounded-[3rem] border border-stone-200 shadow-soft">
-              <input 
-                type="email" 
-                placeholder="Secure Email Address" 
-                className="flex-grow bg-transparent px-10 py-5 outline-none text-primary placeholder:text-primary/20 font-black text-[10px] uppercase tracking-widest"
-                required
-              />
-              <button type="submit" className="px-12 py-5 bg-primary hover:bg-primary-hover text-white font-black text-[10px] uppercase tracking-[0.3em] rounded-[2.5rem] transition-all shadow-glow active:scale-95">
-                Join Inner Circle
-              </button>
-            </form>
-          </motion.div>
+      {/* ─── NEWSLETTER ─── */}
+      <section className="bg-[#F7F4EF] py-16 px-4">
+        <div className="max-w-md mx-auto text-center">
+          <span className="bg-[#F0E8D8] text-stone-500 text-[9px] font-black uppercase tracking-widest px-4 py-1.5 rounded-full">
+            JOIN THE COMMUNITY
+          </span>
+          <h2 className="text-2xl font-playfair font-bold text-stone-900 mt-4 mb-2">
+            Start Your Organic Journey
+          </h2>
+          <p className="text-stone-400 text-[11px] mb-8 leading-relaxed">
+            Join 10,000+ happy families receiving weekly health tips and exclusive harvest releases.
+          </p>
+          <form className="flex gap-3">
+            <input
+              type="email"
+              placeholder="Your email address"
+              className="flex-grow bg-white border border-stone-200 rounded-full px-5 py-3 text-sm outline-none focus:border-[#1B4332] transition-colors"
+            />
+            <button type="submit" className="bg-[#1B4332] text-white px-6 py-3 rounded-full text-sm font-black hover:bg-[#14532d] transition-colors">
+              JOIN NOW
+            </button>
+          </form>
         </div>
       </section>
+
     </div>
   );
 }
