@@ -8,7 +8,7 @@ import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { signOut } from 'firebase/auth';
 import { auth } from '@/firebase/firebaseInit';
-import { Search, Heart, ShoppingBag, Menu, X, ChevronLeft, Mail, Phone, MapPin } from 'lucide-react';
+import { Search, Heart, ShoppingBag, Menu, X, ChevronLeft, Mail, Phone, MapPin, Shield } from 'lucide-react';
 import { useRouter, usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -42,6 +42,7 @@ export default function Navbar() {
   const cartCount = cartItems.reduce((t: number, i: CartItem) => t + i.qty, 0);
   const wishCount = wishlistItems?.length || 0;
   const isSubPage = pathname !== '/';
+  const isAdmin = userData?.role === 'admin';
 
   useEffect(() => {
     const fn = () => setScrolled(window.scrollY > 10);
@@ -58,18 +59,49 @@ export default function Navbar() {
     <>
       {/* ── HEADER ── */}
       <header className={`fixed top-0 left-0 right-0 z-50 bg-white transition-shadow duration-300 ${scrolled ? 'shadow-sm' : 'border-b border-stone-100'}`}>
-        <div className="flex items-center justify-between px-4 h-14">
+        <div className="max-w-screen-xl mx-auto flex items-center justify-between px-4 h-14 lg:h-16">
 
-          {/* Left: back arrow on sub-pages OR logo */}
+          {/* Left: back arrow on sub-pages (mobile) + Logo */}
           <div className="flex items-center gap-2">
             {isSubPage && (
-              <button onClick={() => router.back()} className="p-1 text-stone-500 hover:text-[#1B4332] transition-colors">
+              <button onClick={() => router.back()} className="lg:hidden p-1 text-stone-500 hover:text-[#1B4332] transition-colors">
                 <ChevronLeft className="w-5 h-5" />
               </button>
             )}
             {/* Logo */}
             <Logo variant="navbar" />
           </div>
+
+          {/* Center: Desktop navigation links (hidden on mobile) */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 ${
+                  pathname === link.href
+                    ? 'text-[#1B4332] bg-[#1B4332]/5'
+                    : 'text-stone-500 hover:text-[#1B4332] hover:bg-stone-50'
+                }`}
+              >
+                {link.name}
+              </Link>
+            ))}
+            {/* Admin link – desktop (only for admin users) */}
+            {isAdmin && (
+              <Link
+                href="/admin"
+                className={`px-4 py-2 rounded-full text-sm font-semibold transition-all duration-200 flex items-center gap-1.5 ${
+                  pathname.startsWith('/admin')
+                    ? 'text-[#DC6827] bg-[#DC6827]/5'
+                    : 'text-[#DC6827]/70 hover:text-[#DC6827] hover:bg-orange-50'
+                }`}
+              >
+                <Shield className="w-4 h-4" />
+                Admin
+              </Link>
+            )}
+          </nav>
 
           {/* Right icons */}
           <div className="flex items-center gap-1">
@@ -98,8 +130,23 @@ export default function Navbar() {
               )}
             </Link>
 
-            {/* Hamburger */}
-            <button onClick={() => setIsMenuOpen(true)} className="p-2 text-stone-500 hover:text-[#1B4332] transition-colors">
+            {/* Desktop: User / Login */}
+            <div className="hidden lg:flex items-center gap-2 ml-2">
+              {user ? (
+                <Link href="/profile" className={`px-3 py-1.5 rounded-full text-sm font-semibold transition-colors ${
+                  pathname === '/profile' ? 'text-[#1B4332] bg-[#1B4332]/5' : 'text-stone-500 hover:text-[#1B4332]'
+                }`}>
+                  {userData?.fullName?.split(' ')[0] || 'Account'}
+                </Link>
+              ) : (
+                <Link href="/login" className="px-5 py-2 bg-[#1B4332] text-white rounded-full text-xs font-black uppercase tracking-wider hover:bg-[#14532d] transition-colors">
+                  Sign In
+                </Link>
+              )}
+            </div>
+
+            {/* Hamburger (mobile + tablet only) */}
+            <button onClick={() => setIsMenuOpen(true)} className="lg:hidden p-2 text-stone-500 hover:text-[#1B4332] transition-colors">
               <Menu className="w-5 h-5" />
             </button>
           </div>
@@ -166,6 +213,20 @@ export default function Navbar() {
                   )}
                 </div>
               </div>
+
+              {/* Admin Panel link – mobile (only for admin users) */}
+              {isAdmin && (
+                <div className="px-6 pb-4">
+                  <Link
+                    href="/admin"
+                    className="flex items-center gap-3 bg-[#DC6827] text-white font-bold text-sm py-3 px-5 rounded-xl hover:bg-[#b85520] transition-colors"
+                  >
+                    <Shield className="w-5 h-5" />
+                    Admin Panel
+                    <span className="ml-auto text-white/60 text-xs">Manage Products →</span>
+                  </Link>
+                </div>
+              )}
 
               {/* Categories */}
               <div className="px-6 py-4 border-t border-white/10">
